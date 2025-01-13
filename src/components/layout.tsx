@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { graphql, Link, useStaticQuery } from 'gatsby'
+import { Link } from 'gatsby'
+import Footer from './footer'
 import {
   container,
   heading,
@@ -8,13 +9,11 @@ import {
   navLinkText,
   activeNavLink,
   siteTitle,
+  mainContent,
 } from './layout.module.css'
-import path from 'path'
 
 const Layout = ({ pageTitle, children }) => {
-  // Get the current pathname to determine active link
   const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
-  console.log(pathname)
 
   return (
     <div className={container}>
@@ -46,10 +45,10 @@ const Layout = ({ pageTitle, children }) => {
           </li>
         </ul>
       </nav>
-      <main>
-        {/* <h1 className={heading}>{pageTitle}</h1> */}
+      <main className={mainContent}>
         {children}
       </main>
+      <Footer />
     </div>
   )
 }
