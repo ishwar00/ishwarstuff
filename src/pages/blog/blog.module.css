@@ -1,0 +1,106 @@
+/* Container styles */
+.container {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Blog index page styles */
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 2rem 0;
+  color: #1a202c;
+}
+
+.intro {
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+}
+
+.posts {
+  margin-top: 2rem;
+}
+
+.postItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.postTitle {
+  color: #2b6cb0;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.postTitle:hover {
+  text-decoration: underline;
+}
+
+.postDate {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+/* Individual blog post styles */
+.blogPost {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.postHeader {
+  margin: 3rem 0 2rem;
+}
+
+.postHeader h1 {
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 0.5rem;
+}
+
+.heroImage {
+  margin: 2rem 0;
+}
+
+.imageCredit {
+  font-size: 0.9rem;
+  color: #718096;
+  margin-top: 0.5rem;
+}
+
+.imageCredit a {
+  color: #2b6cb0;
+  text-decoration: none;
+}
+
+.imageCredit a:hover {
+  text-decoration: underline;
+}
+
+.postContent {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #2d3748;
+}
+
+.postContent p {
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .postItem {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .postHeader h1 {
+    font-size: 1.875rem;
+  }
+}
