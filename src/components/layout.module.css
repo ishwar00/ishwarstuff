@@ -1,6 +1,20 @@
 :root {
-  --text-color: #463F3A;  /* Base text color */
-  --background-color: #FDFAF6;  /* Background color */
+  --text-color: #463f3a; /* Base text color */
+  --background-color: #fdfaf6; /* Background color */
+}
+/* Google Fonts import */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@400;600&display=swap");
+
+/* Headings */
+h1,
+h2,
+h3 {
+  font-family: "Playfair Display", serif;
+}
+
+/* Body text */
+body {
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 :global(body) {
@@ -16,7 +30,6 @@
   max-width: 650px;
   margin: 0 auto;
   padding: 2rem 2rem 0 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
   line-height: 1.6;
   color: var(--text-color);
 }
@@ -48,7 +61,7 @@
 }
 
 .nav-link-text:hover {
-  color: #1a365d;  /* Darker on hover */
+  color: #1a365d; /* Darker on hover */
 }
 
 .site-title {
@@ -99,7 +112,7 @@
 }
 
 .activeNavLink::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -4px;
   left: 0;

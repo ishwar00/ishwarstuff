@@ -84,6 +84,7 @@
 }
 
 .postContent {
+  font-family: "Source Sans Pro", sans-serif;
   font-size: 1.1rem;
   line-height: 1.7;
   color: #2d3748;
@@ -99,7 +100,7 @@
     flex-direction: column;
     gap: 0.25rem;
   }
-  
+
   .postHeader h1 {
     font-size: 1.875rem;
   }
