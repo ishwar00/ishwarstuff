@@ -11,8 +11,8 @@ const BlogPage = ({ data }) => {
         <div className={styles.container}>
           <h1 className={styles.title}>Writings</h1>
           <p className={styles.intro}>
-            Well, I don't have theme for my blogs yet, maybe never will, but I
-            guess most of them will be about programming, so here you go.
+            Well, I don’t have a theme for my blogs yet—maybe I never will—but I
+            guess most of them will be about programming. So, here you go!
           </p>
 
           <div className={styles.posts}>

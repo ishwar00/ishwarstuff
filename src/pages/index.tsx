@@ -25,14 +25,14 @@ const IndexPage = ({ data }) => {
           animate={false}
         >
           software engineer
-        </RoughNotation>{' '}
-        developer, worked on backend servers as professionally , In past I have
-        explored and built compilers(frontend and bit of backend), Virtual
-        Machine, JavaScript Runtime and few other things.
+        </RoughNotation>{' '} developer.
+        I have worked professionally on backend servers. In the past, I have
+        explored and built compilers (frontend and some backend), virtual
+        machines, a JavaScript runtime, and a few other things.
       </p>
       <p>
-        This is the place on the internet to put my thoughts, opinions,
-        projects, and other stuff that I find interesting.
+        This is my space on the internet to share my thoughts, opinions,
+        projects, and other things I find interesting.
       </p>
 
       <div className={styles.socialLinks}>
