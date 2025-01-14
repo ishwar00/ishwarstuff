@@ -32,7 +32,7 @@ const Layout = ({ pageTitle, children }) => {
               to="/blog"
               className={`${navLinkText} ${pathname.includes('/blog') ? activeNavLink : ''}`}
             >
-              Blog
+              Writing
             </Link>
           </li>
           <li className={navLinkItem}>

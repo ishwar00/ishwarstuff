@@ -1,15 +1,15 @@
 /* Container styles */
 .container {
-  max-width: 650px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 2rem 0;
 }
 
 /* Blog index page styles */
 .title {
   font-size: 2rem;
   font-weight: 600;
-  margin: 2rem 0;
+  margin-bottom: 1.5rem;
   color: #1a202c;
 }
 
