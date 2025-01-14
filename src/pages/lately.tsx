@@ -22,8 +22,16 @@ const LatelyPage = ({ data }) => {
 
         <div className={styles.activities}>
           <div className={styles.activity}>
-            <span className={styles.bullet}>•</span>
-            Building a compiler frontend in Rust - starting with lexical analysis
+            <span className={styles.bullet}>Now:</span>
+            Updating My Github Profile README
+          </div>
+          <div className={styles.activity}>
+            <span className={styles.bullet}>Earlier:</span>
+            Building my space on the internet, the one you're currently on
+          </div>
+          <div className={styles.activity}>
+            <span className={styles.bullet}>Later:</span>
+            Publish SuvidhaJS
           </div>
         </div>
 
