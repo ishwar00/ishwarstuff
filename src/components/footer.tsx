@@ -3,17 +3,36 @@ import * as styles from './footer.module.css'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
-  
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
         <div className={styles.links}>
-          <a href="https://github.com/ishwar00" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a href="https://x.com/Ishwar71078132" target="_blank" rel="noopener noreferrer">Twitter</a>
+          {/* <a */}
+          {/*   href="https://github.com/ishwar00" */}
+          {/*   target="_blank" */}
+          {/*   rel="noopener noreferrer" */}
+          {/* > */}
+          {/*   GitHub */}
+          {/* </a> */}
+          {/* <a */}
+          {/*   href="https://x.com/Ishwar71078132" */}
+          {/*   target="_blank" */}
+          {/*   rel="noopener noreferrer" */}
+          {/* > */}
+          {/*   Twitter */}
+          {/* </a> */}
+          {/* <a */}
+          {/*   href="https://flowcv.com/resume/7na4abrtft" */}
+          {/*   target="_blank" */}
+          {/*   rel="noopener noreferrer" */}
+          {/* > */}
+          {/*   Resume */}
+          {/* </a> */}
         </div>
       </div>
     </footer>
   )
 }
 
-export default Footer 
+export default Footer
