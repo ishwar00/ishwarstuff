@@ -105,3 +105,23 @@
     font-size: 1.875rem;
   }
 }
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.socialLink {
+  padding: 0.1rem 0.5rem;
+  border: 1px solid #0066cc;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #0066cc;
+  transition: all 0.2s ease;
+}
+
+.socialLink:hover {
+  background-color: #0066cc;
+  color: white;
+}

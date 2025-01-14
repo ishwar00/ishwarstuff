@@ -1,0 +1,26 @@
+.lately {
+  max-width: 600px;
+  margin: 3rem auto;
+}
+
+.intro {
+  color: #666;
+  margin: 2rem 0;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.list li {
+  margin: 1.5rem 0;
+  color: #463f3a;
+}
+
+.meta {
+  display: block;
+  margin-top: 3rem;
+  color: #666;
+  font-style: italic;
+}

@@ -9,7 +9,7 @@ import {
   navLinkText,
   activeNavLink,
   siteTitle,
-  mainContent,
+  mainContent
 } from './layout.module.css'
 
 const Layout = ({ pageTitle, children }) => {
@@ -20,34 +20,32 @@ const Layout = ({ pageTitle, children }) => {
       <nav>
         <ul className={navLinks}>
           <li className={navLinkItem}>
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className={`${navLinkText} ${pathname === '/' ? activeNavLink : ''}`}
             >
               Home
             </Link>
           </li>
           <li className={navLinkItem}>
-            <Link 
-              to="/about" 
-              className={`${navLinkText} ${pathname.includes('/about') ? activeNavLink : ''}`}
-            >
-              About
-            </Link>
-          </li>
-          <li className={navLinkItem}>
-            <Link 
-              to="/blog" 
+            <Link
+              to="/blog"
               className={`${navLinkText} ${pathname.includes('/blog') ? activeNavLink : ''}`}
             >
               Blog
             </Link>
           </li>
+          <li className={navLinkItem}>
+            <Link
+              to="/lately"
+              className={`${navLinkText} ${pathname.includes('/lately') ? activeNavLink : ''}`}
+            >
+              Lately
+            </Link>
+          </li>
         </ul>
       </nav>
-      <main className={mainContent}>
-        {children}
-      </main>
+      <main className={mainContent}>{children}</main>
       <Footer />
     </div>
   )

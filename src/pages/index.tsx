@@ -12,7 +12,7 @@ import { graphql, Link } from 'gatsby'
 const IndexPage = ({ data }) => {
   return (
     <Layout pageTitle="Home Page">
-      <h1>Hallo!</h1>
+      <h1 style={{ marginTop: '3rem' }}>Hallo!</h1>
       <p>
         I'm <b>Ishwar</b>, a{' '}
         <RoughNotation
@@ -26,15 +26,31 @@ const IndexPage = ({ data }) => {
         >
           software engineer
         </RoughNotation>{' '}
-        developer, worked on backend servers, compilers(frontend, and bit of
-        backend), Virtual Machine etc.
+        developer, worked on backend servers as professionally , In past I have
+        explored and built compilers(frontend and bit of backend), Virtual
+        Machine, JavaScript Runtime and few other things.
       </p>
       <p>
-        This is place on the internet to put my thoughts, opinions, projects,
-        and other stuff that I find interesting.
+        This is the place on the internet to put my thoughts, opinions,
+        projects, and other stuff that I find interesting.
       </p>
 
-      <div className={styles.posts}>
+      <div className={styles.socialLinks}>
+        <a href="https://github.com/ishwar00" className={styles.socialLink}>
+          <span>Code</span>
+        </a>
+        <a
+          href="https://flowcv.com/resume/7na4abrtft"
+          className={styles.socialLink}
+        >
+          <span>Resume</span>
+        </a>
+        <a href="https://x.com/Ishwar71078132" className={styles.socialLink}>
+          <span>Twitter</span>
+        </a>
+      </div>
+
+      <div className={styles.posts} style={{ marginBottom: 0 }}>
         <h2>Latest Posts</h2>
         {data.allMdx.nodes.map((node) => (
           <article key={node.id} className={styles.postItem}>

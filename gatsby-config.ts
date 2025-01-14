@@ -19,6 +19,13 @@ const config: GatsbyConfig = {
         path: `${__dirname}/blog`,
       }
     },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: `blog`,
+        path: `${__dirname}/src/pages/`,
+      }
+    },
     "gatsby-plugin-mdx",
     "gatsby-transformer-sharp",
     {
