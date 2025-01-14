@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Layout from '../components/layout'
 import Seo from '../components/seo'
-import { RoughNotation, RoughNotationGroup } from 'react-rough-notation'
+import { RoughNotation } from 'react-rough-notation'
 import * as styles from './blog/blog.module.css'
 import { graphql, Link } from 'gatsby'
 // Terra-cotta: #C65D4D - warm, desert-like color with good contrast

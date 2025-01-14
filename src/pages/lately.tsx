@@ -12,33 +12,23 @@ const LatelyPage = ({ data }) => {
   return (
     <Layout pageTitle="Lately">
       <div className={styles.lately}>
-        <h1>
+        <h1 className={styles.title}>
           {monthName}, {year}
         </h1>
 
-        <p className={styles.intro}>Things keeping me occupied lately...</p>
+        <p className={styles.intro}>
+          One thing at a time, all in. Currently focused on:
+        </p>
 
-        <ul className={styles.list}>
-          <li>
-            Reading "Designing Data-Intensive Applications" - taking notes on
-            distributed systems
-          </li>
-
-          <li>
-            Building a compiler frontend in Rust - starting with lexical
-            analysis
-          </li>
-
-          <li>
-            Got deep into WebAssembly internals - fascinating how the stack
-            machine works
-          </li>
-
-          <li>Writing more about systems design and backend architecture</li>
-        </ul>
+        <div className={styles.activities}>
+          <div className={styles.activity}>
+            <span className={styles.bullet}>•</span>
+            Building a compiler frontend in Rust - starting with lexical analysis
+          </div>
+        </div>
 
         <span className={styles.meta}>Last Updated: {lastModified}</span>
-      </div>{' '}
+      </div>
     </Layout>
   )
 }
