@@ -23,15 +23,15 @@ const LatelyPage = ({ data }) => {
         <div className={styles.activities}>
           <div className={styles.activity}>
             <span className={styles.bullet}>Now:</span>
-            Updating My Github Profile README
+            Writing 'Eff JavaScript `try-catch` Scoping'
           </div>
           <div className={styles.activity}>
             <span className={styles.bullet}>Earlier:</span>
-            Building my space on the internet, the one you're currently on
+            Updating My Github Profile README
           </div>
           <div className={styles.activity}>
             <span className={styles.bullet}>Later:</span>
-            Write 'Eff JavaScript `try-catch` Scoping'
+            Publish SuvidhaJS
           </div>
         </div>
 
