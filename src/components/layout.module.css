@@ -37,6 +37,7 @@ body {
 .mainContent {
   flex: 1;
   padding-bottom: 4rem;
+  font-size: 1.1rem;
 }
 
 .nav-links {
