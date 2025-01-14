@@ -31,7 +31,7 @@ const LatelyPage = ({ data }) => {
           </div>
           <div className={styles.activity}>
             <span className={styles.bullet}>Later:</span>
-            Publish SuvidhaJS
+            Write 'Eff JavaScript `try-catch` Scoping'
           </div>
         </div>
 
