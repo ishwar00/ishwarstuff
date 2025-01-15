@@ -6,7 +6,8 @@ import { graphql } from 'gatsby'
 import * as styles from './blog.module.css'
 
 const BlogPost = ({ data, children }) => {
-  const image = getImage(data.mdx.frontmatter.hero_image)
+  const heroImage = data.mdx.frontmatter.hero_image;
+  const image = heroImage && getImage(heroImage);
   return (
     <Layout pageTitle={data.mdx.frontmatter.title}>
       <article className={styles.blogPost}>
@@ -15,7 +16,7 @@ const BlogPost = ({ data, children }) => {
           <time className={styles.postDate}>{data.mdx.frontmatter.date}</time>
         </header>
         
-        {image && (
+        {false && (
           <div className={styles.heroImage}>
             <GatsbyImage
               image={image}
@@ -46,14 +47,14 @@ export const query = graphql`
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
-        hero_image_alt
-        hero_image_credit_link
-        hero_image_credit_text
-        hero_image {
-          childImageSharp {
-            gatsbyImageData
-          }
-        }
+       # hero_image_alt
+       # hero_image_credit_link
+       # hero_image_credit_text
+       # hero_image {
+       #   childImageSharp {
+       #     gatsbyImageData
+       #   }
+       # }
       }
     }
   }

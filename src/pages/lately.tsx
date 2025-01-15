@@ -23,11 +23,10 @@ const LatelyPage = ({ data }) => {
         <div className={styles.activities}>
           <div className={styles.activity}>
             <span className={styles.bullet}>Now:</span>
-            Writing 'Eff JavaScript `try-catch` Scoping'
+            Writing 'JavaScript `try-catch` Scoping Sucks'
           </div>
           <div className={styles.activity}>
             <span className={styles.bullet}>Later:</span>
-            {/* I want to new package called suvidhajs in npm */}
             Publishing SuvidhaJS to npm
           </div>
           <div className={styles.activity}>

@@ -1,0 +1,34 @@
+---
+title: "JavaScript `try-catch` Scoping Sucks"
+date: "2025-01-14"
+slug: "js-try-catch-scoping-sucks"
+---
+
+
+```typescript
+function mad() {
+  if (Math.random() > 0.5) {
+    throw new Error('Random error');
+  }
+  return 'mad';
+}
+
+
+function foo() {
+  let bar: string;
+  try {
+    bar = mad();
+  } catch(err: unknown) {
+    // handler error
+  }
+  console.log(bar)
+}
+```
+
+
+
+
+
+
+
+// https://www.youtube.com/watch?v=ayaxCCRkNeM
