@@ -23,8 +23,8 @@ const Code = (props: any) => {
   const highlights = calculateLinesToHighlight(
     props.children.props.highlights || ''
   )
-  // const theme = themes.ultramin
-  const theme = themes.duotoneLight
+  const theme = themes.ultramin
+  // const theme = themes.duotoneLight
   return (
     <Highlight code={code} language={language} theme={theme}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => {
@@ -36,9 +36,7 @@ const Code = (props: any) => {
             >{`${language}`}</div>
             {<div>{file && `File: ${file}`}</div>}
             {tokens.map((line, i) => {
-              const space = Array(
-                maxPrefixSpace - i.toString().length
-              )
+              const space = Array(maxPrefixSpace - i.toString().length)
                 .fill(' ')
                 .join('')
               return (
@@ -49,10 +47,10 @@ const Code = (props: any) => {
                       ? theme.plain.background
                       : 'transparent',
                     display: 'block',
-                    fontSize: '0.9rem'
+                    fontSize: '0.8rem'
                   }}
                 >
-                  {<span style={{opacity: '0.4'}}>{`${space}${i}|`}</span>}
+                  {<span style={{ opacity: '0.4' }}>{`${space}${i}|`}</span>}
                   {line.map((token, key) => (
                     <span {...getTokenProps({ token, key })} />
                   ))}

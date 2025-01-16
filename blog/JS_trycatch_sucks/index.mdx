@@ -4,6 +4,179 @@ date: "2025-01-14"
 slug: "js-try-catch-scoping-sucks"
 ---
 
+## How It Started
+
+I joined [injuly](https://injuly.in/)'s live video stream in the discord server [The Ziggurat](https://discord.gg/BwGez7Js) just for the vibe.
+He was writing something in [Zig](https://ziglang.org/) - can't remember what - but what caught my attention was
+Zig's error handling using [try](https://ziglang.org/documentation/master/#toc-try) and [catch](https://ziglang.org/documentation/master/#toc-catch).
+I liked the way they handled errors and I wanted something similar in JavaScript. I had problems with JavaScript's `try-catch` block.
+It's bulky, syntax itself takes up two extra lines and scoping is bad. `try` block creates a new scope, which forces you to declare variable before 
+using it, it's annoying.
+
+you would not have problem if you don't mind huge `try-catch` blocks.
+Well, I don't like huge `try-catch` blocks.
+
+```typescript
+let foo: string;
+try {
+  foo = await mad();
+} catch(err: unknown) {
+  // Handler error;
+}
+console.log(foo);
+```
+
+## It was staring me right in the face 
+
+Let's take a look at the Zig's error handling with `catch` with a <s>good</s> example.
+```zig
+const std = @import("std");
+
+fn divide(a: i32, b: i32) !i32 {
+    if (b == 0) {
+        return error.DivisionByZero;
+    }
+    return a / b;
+}
+
+pub fn main() !void {
+    // Example 1: Using catch to provide a default value
+    const result1 = divide(10, 0) catch 0;
+    std.debug.print("Result with default: {}\n", .{result1});  // prints 0
+
+    // Example 2: Using catch to handle the error
+    const result2 = divide(10, 0) catch |err| {
+        std.debug.print("Oops! {}\n", .{err});
+        return err;
+    };
+}
+```
+
+You see, we are handling the error at the same place where we are calling the function.
+no new scope, no bulky `try-catch` block and no new indentation, for the result. The way it was supposed to be. It's better than Rust's way.
+Rust does great for default values but if you want to handle error then you have to `match` creating a new scope, and one level of indentation.
+But it looks more neat and clean though.
+
+```rust
+fn divide(a: i32, b: i32) -> Result<i32, &'static str> {
+    if b == 0 {
+        return Err("DivisionByZero");
+    }
+    Ok(a / b)
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Example 1: Using unwrap_or to provide a default value
+
+    let result1 = divide(10, 0).unwrap_or(0);
+    println!("Result with default: {}", result1); // prints 0
+
+    // Example 2: Using match to handle the error
+    match divide(10, 0) {
+        Ok(result) => println!("Result: {}", result),
+        Err(err) => {
+            println!("Oops! {}", err);
+            return Err(err.into());
+        }
+    }
+
+    Ok(())
+}
+```
+
+Now it's time to look at the JavaScript's way of doing the same thing and not using `try-catch` block.
+I am going to cheat here a bit, I am going to make `divide()` function async. I'll come back to it later.
+
+```typescript
+async function divide(a, b) {
+    if (b === 0) {
+        throw new Error("DivisionByZero");
+    }
+    return a / b;
+}
+
+function main() {
+    // Example 1: Using a default value with .catch()
+    let result1 = divide(10, 0).catch((_) => 0);
+    console.log(`Result with default: ${result1}`); // prints 0
+
+    // Example 2: Handling the error explicitly
+    const result2 = divide(10, 0).catch((err) => {
+      console.log(`Oops! ${err.message}`);
+      throw err;
+    });
+    console.log(`Result: ${result2}`);
+}
+
+main();
+```
+
+I made synchronous function `divide()` async, which is not alright. But that way you can see using `.catch()` 
+is like Zig's `catch` block. Practically, it's the same thing. Because we don't return stuff in JS we `throw` error.
+
+
+
+
+
+
+
+
+
+
+
+
+
+## TLDR;
+
+Declaring a variable before `try-catch` block and using it inside of it is something that I don't like.
+
+```typescript
+let foo: string;
+try {
+  foo = await mad();
+} catch(err: unknown) {
+  // handler error;
+  throw err;
+}
+console.log(foo);
+```
+
+Better way to handle this situation is to use `.catch()` method on promise.
+
+```typescript
+let foo = await mad().catch(err => {
+  // handle error
+  throw err;
+})
+console.log(foo);
+````
+
+What if `mad()` is not `async` function, well for that we can use `$try` function.
+
+```typescript
+function $try<T>(value: T | Promise<T>): Promise<T> {
+  return Promise.resolve(value);
+}
+
+  let foo = await $try(mad()).catch((err) => {
+    // Handler error
+    throw err
+  })
+```
+
+
+
+
+
+
+
+There has been a times where I had to declare(not sure If did though, don't remember) a variable outside of `try-catch` block
+and use it inside of it to fill the variable with result and use it later after `try-catch` block.
+
+The way I look at try catch block 
+
+
+
 
 ```typescript
 function mad() {
