@@ -17,7 +17,7 @@ This blog is about how Zig's error-handling pattern inspired me to find a workar
 ```typescript
 let foo: string;
 try {
-  foo = await bar();
+  foo = bar();
 } catch(err: unknown) {
   // Handler error;
 }
@@ -92,7 +92,7 @@ I did not use a `try-catch` block at all, and it looks very similar
 to Zig's `catch` block. Practically, it's the same thing.
 
 
-Making the divide() function asynchronous isn't ideal or recommended; this was just to illustrate the concept.
+Making the `divide()` function asynchronous isn't ideal or recommended; this was just to illustrate the concept.
 Most of the time, we (backend people) deal with asynchronous functions anyway.
 
 #### What about synchronous functions then?
