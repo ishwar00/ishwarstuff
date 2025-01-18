@@ -26,7 +26,7 @@ console.log(foo);
 
 Above code is annoying, unless you don't mind huge `try-catch` blocks.
 
-## Getting Inspired
+## Inspiration
 Let's take a look at the Zig's error handling with `catch` with an <s>good</s> example.
 
 ```zig
@@ -53,7 +53,7 @@ pub fn main() !void {
 ```
 
 Here, We handle the error at the same place where the function is called.
-No new scope, no bulky `try-catch` block and no extra indentation. 
+No new scope, no bulky `try-catch` block and no extra indentation. It's easy to read and understand.
 
 ## Zig's influence
 I really wanted something similar in JavaScript. I tried creating classes and utility functions, but nothing worked
@@ -96,6 +96,8 @@ Making the `divide()` function asynchronous isn't ideal or recommended; this was
 Most of the time, we (backend people) deal with asynchronous functions anyway.
 
 #### What about synchronous functions then?
+
+I came up with following utility function.
 
 ```typescript
 const $try = <T extends (...args: any[]) => any>(fn: T) => {
