@@ -52,46 +52,16 @@ pub fn main() !void {
 }
 ```
 
-We are handling the error at the same place where we are calling the function.
-No new scope, no bulky `try-catch` block and no new indentation. 
-
-It's better than Rust's way(wait, I have an explanation for that). Rust does great for default values but 
-if you want to handle error then you have to `match`, creating a new scope and one level of indentation.
-But it looks more neat and clean though.
-
-```rust
-fn divide(a: i32, b: i32) -> Result<i32, &'static str> {
-    if b == 0 {
-        return Err("DivisionByZero");
-    }
-    Ok(a / b)
-}
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Example 1: Using unwrap_or to provide a default value
-    let result1 = divide(10, 0).unwrap_or(0);
-    println!("Result with default: {}", result1); // prints 0
-
-    // Example 2: Using match to handle the error
-    match divide(10, 0) {
-        Ok(result) => println!("Result: {}", result),
-        Err(err) => {
-            println!("Oops! {}", err);
-            return Err(err.into());
-        }
-    }
-
-    Ok(())
-}
-```
+Here, We handle the error at the same place where the function is called.
+No new scope, no bulky `try-catch` block and no extra indentation. 
 
 ## Zig's influence
-I really wanted something similar in JavaScript. I tried creating classes and util functions, but did not work 
-until I realized we already have something similar JavaScript, <i>It was staring me right in the face</i>.
+I really wanted something similar in JavaScript. I tried creating classes and utility functions, but nothing worked
+-until I realized we already have something similar in JavaScript, *It was staring me right in the face*.
 
 
-To show Zig's way of error handling in JavaScript, I am going to do a gross thing, 
- make `divide()` function async(Now you know why **good** was striked out). I'll come back to it.
+To show Zig's way of error handling in JavaScript, I'm going to do something unconventional: 
+ I'll make the `divide()` function asynchronous (now you know why **good** was stricken out). I'll come back to it this later.
 
 
 Here you go:
@@ -118,12 +88,12 @@ async function main() {
 
 main();
 ```
-I did not use `try-catch` block at all, 
-It looks so like Zig's `catch` block. Practically, it's the same thing.
+I did not use a `try-catch` block at all, and it looks very similar 
+to Zig's `catch` block. Practically, it's the same thing.
 
 
-Making `divide()` async function is not alright. Not recommended. It was just to make the point.
-Most of the time we(backend people) are dealing with async functions.
+Making the divide() function asynchronous isn't ideal or recommended; this was just to illustrate the concept.
+Most of the time, we (backend people) deal with asynchronous functions anyway.
 
 #### What about synchronous functions then?
 
@@ -144,8 +114,8 @@ const $try = <T extends (...args: any[]) => any>(fn: T) => {
   return new Try(fn)
 }
 ```
-`try` is a keyword in JavaScript. So have to settle for `$try` or `try_` whatever suits you.
-`$try()` will return an anonymous class with a `catch()` method which takes a synchronous error handler.
+`try` is a reserved keyword in JavaScript, we have to settle for `$try` or `try_`-whichever suits you.
+`$try()` returns an anonymous class with a `catch()` method that takes a synchronous error handler.
 
 ```typescript
 function divide(a, b) {
@@ -171,11 +141,11 @@ function main() {
 main();
 ```
 
-It is not perfect though, It clutters the call site and you can't pass async functions to it as error handler.
+This isn't perfect-it clutters the call site and doesn't support asynchronous functions as error handlers.
 
-I don't use it blindly or `try-catch` block is bad or anything.
-What I am addressing here, could be considered as good practice or not, depends on the situation. 
-I try out different styles and see if it makes more readable code.
+I don't blindly avoid the `try-catch` block, nor do I think it's inherently bad.
+What I'm addressing here could be considered a good practice—or not—depending on the situation.
+I like to experiment with different styles to see if they make code more readable.
 
 <p style={{ 
     marginTop: '64px', 
