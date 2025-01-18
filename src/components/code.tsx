@@ -23,41 +23,52 @@ const Code = (props: any) => {
   const highlights = calculateLinesToHighlight(
     props.children.props.highlights || ''
   )
-  const theme = themes.ultramin
-  // const theme = themes.duotoneLight
+  // const theme = themes.ultramin
+  const theme = themes.nightOwlLight
+  theme.styles = theme.styles.map((s) => {
+    return {
+      ...s,
+      style: {
+        ...s.style,
+        fontStyle: 'normal'
+      }
+    }
+  })
   return (
-    <Highlight code={code} language={language} theme={theme}>
+    <Highlight code={code} language={language} theme={{ ...theme }}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => {
         const maxPrefixSpace = tokens.length.toString().length
         return (
-          <pre className={className} style={style}>
-            <div
-              style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}
-            >{`${language}`}</div>
-            {<div>{file && `File: ${file}`}</div>}
-            {tokens.map((line, i) => {
-              const space = Array(maxPrefixSpace - i.toString().length)
-                .fill(' ')
-                .join('')
-              return (
-                <div
-                  {...getLineProps({ line, key: i })}
-                  style={{
-                    background: highlights(i)
-                      ? theme.plain.background
-                      : 'transparent',
-                    display: 'block',
-                    fontSize: '0.8rem'
-                  }}
-                >
-                  {<span style={{ opacity: '0.4' }}>{`${space}${i}|`}</span>}
-                  {line.map((token, key) => (
-                    <span {...getTokenProps({ token, key })} />
-                  ))}
-                </div>
-              )
-            })}
-          </pre>
+          <div className={'pre-highlight'}>
+            <pre className={className} style={style}>
+              <div
+                style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}
+              >{`${language}`}</div>
+              {<div>{file && `File: ${file}`}</div>}
+              {tokens.map((line, i) => {
+                const space = Array(maxPrefixSpace - i.toString().length)
+                  .fill(' ')
+                  .join('')
+                return (
+                  <div
+                    {...getLineProps({ line, key: i })}
+                    style={{
+                      background: highlights(i)
+                        ? theme.plain.background
+                        : 'transparent',
+                      display: 'block',
+                      fontSize: '0.8rem'
+                    }}
+                  >
+                    {<span style={{ opacity: '0.4' }}>{`${space}${i}|`}</span>}
+                    {line.map((token, key) => (
+                      <span {...getTokenProps({ token, key })} />
+                    ))}
+                  </div>
+                )
+              })}
+            </pre>
+          </div>
         )
       }}
     </Highlight>

@@ -27,7 +27,13 @@ console.log(foo);
 Above code is annoying, unless you don't mind huge `try-catch` blocks.
 
 ## Inspiration
-Let's take a look at the Zig's error handling with `catch` with an <s>good</s> example.
+Let's take a look at the Zig's error handling with `catch` with an <RoughNotation 
+    type="strike-through" 
+    color="#9E7B5F" 
+    show={true} 
+    strokeWidth={2} 
+    iterations={3} 
+    animate={false}>good</RoughNotation> example.
 
 ```zig
 const std = @import("std");
@@ -116,6 +122,7 @@ const $try = <T extends (...args: any[]) => any>(fn: T) => {
   return new Try(fn)
 }
 ```
+
 `try` is a reserved keyword in JavaScript, we have to settle for `$try` or `try_`-whichever suits you.
 `$try()` returns an anonymous class with a `catch()` method that takes a synchronous error handler.
 
