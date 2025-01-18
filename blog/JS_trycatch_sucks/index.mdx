@@ -1,34 +1,34 @@
 ---
-title: "JavaScript `try-catch` Scoping Sucks"
+title: "Zig's Catch Pattern In JavaScript"
 date: "2025-01-14"
-slug: "js-try-catch-scoping-sucks"
+slug: "zig-catch-pattern-in-js"
 ---
 
 ## How It Started
 
-I joined [injuly](https://injuly.in/)'s live video stream in the discord server [The Ziggurat](https://discord.gg/BwGez7Js) just for the vibe.
+I was watching [injuly](https://injuly.in/)'s live video stream in the discord server [The Ziggurat](https://discord.gg/BwGez7Js) just for the vibe.
 He was writing something in [Zig](https://ziglang.org/) - can't remember what - but what caught my attention was
-Zig's error handling using [try](https://ziglang.org/documentation/master/#toc-try) and [catch](https://ziglang.org/documentation/master/#toc-catch).
-I liked the way they handled errors and I wanted something similar in JavaScript. I had problems with JavaScript's `try-catch` block.
-It's bulky, syntax itself takes up two extra lines and scoping is bad. `try` block creates a new scope, which forces you to declare variable before 
-using it, it's annoying.
+Zig's error handling using [try](https://ziglang.org/documentation/master/#try) and [catch](https://ziglang.org/documentation/master/#catch).
+I liked the way they handled errors and Immiediately wanted something similar in JavaScript. 
 
-you would not have problem if you don't mind huge `try-catch` blocks.
-Well, I don't like huge `try-catch` blocks.
+I find scoping of JavaScript's `try-catch` block quite annoying, It forces you to declare variable before 
+using it. This blog is about How Zig's `catch` error handling pattern guided me remedy this scoping issue.
 
 ```typescript
 let foo: string;
 try {
-  foo = await mad();
+  foo = await bar();
 } catch(err: unknown) {
   // Handler error;
 }
 console.log(foo);
 ```
 
-## It was staring me right in the face 
+Above code is annoying, unless you don't mind huge `try-catch` blocks.
 
-Let's take a look at the Zig's error handling with `catch` with a <s>good</s> example.
+## Getting Inspired
+Let's take a look at the Zig's error handling with `catch` with an <s>good</s> example.
+
 ```zig
 const std = @import("std");
 
@@ -52,9 +52,11 @@ pub fn main() !void {
 }
 ```
 
-You see, we are handling the error at the same place where we are calling the function.
-no new scope, no bulky `try-catch` block and no new indentation, for the result. The way it was supposed to be. It's better than Rust's way.
-Rust does great for default values but if you want to handle error then you have to `match` creating a new scope, and one level of indentation.
+We are handling the error at the same place where we are calling the function.
+No new scope, no bulky `try-catch` block and no new indentation. 
+
+It's better than Rust's way(wait, I have an explanation for that). Rust does great for default values but 
+if you want to handle error then you have to `match`, creating a new scope and one level of indentation.
 But it looks more neat and clean though.
 
 ```rust
@@ -67,7 +69,6 @@ fn divide(a: i32, b: i32) -> Result<i32, &'static str> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Example 1: Using unwrap_or to provide a default value
-
     let result1 = divide(10, 0).unwrap_or(0);
     println!("Result with default: {}", result1); // prints 0
 
@@ -84,9 +85,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-Now it's time to look at the JavaScript's way of doing the same thing and not using `try-catch` block.
-I am going to cheat here a bit, I am going to make `divide()` function async. I'll come back to it later.
+## Zig's influence
+I really wanted something similar in JavaScript. I tried creating classes and util functions, but did not work 
+until I realized we already have something similar JavaScript, <i>It was staring me right in the face</i>.
 
+
+To show Zig's way of error handling in JavaScript, I am going to do a gross thing, 
+ make `divide()` function async(Now you know why **good** was striked out). I'll come back to it.
+
+
+Here you go:
 ```typescript
 async function divide(a, b) {
     if (b === 0) {
@@ -95,13 +103,13 @@ async function divide(a, b) {
     return a / b;
 }
 
-function main() {
+async function main() {
     // Example 1: Using a default value with .catch()
-    let result1 = divide(10, 0).catch((_) => 0);
+    let result1 = await divide(10, 0).catch((_) => 0);
     console.log(`Result with default: ${result1}`); // prints 0
 
     // Example 2: Handling the error explicitly
-    const result2 = divide(10, 0).catch((err) => {
+    const result2 = await divide(10, 0).catch((err) => {
       console.log(`Oops! ${err.message}`);
       throw err;
     });
@@ -110,98 +118,70 @@ function main() {
 
 main();
 ```
-
-I made synchronous function `divide()` async, which is not alright. But that way you can see using `.catch()` 
-is like Zig's `catch` block. Practically, it's the same thing. Because we don't return stuff in JS we `throw` error.
-
+I did not use `try-catch` block at all, 
+It looks so like Zig's `catch` block. Practically, it's the same thing.
 
 
+Making `divide()` async function is not alright. Not recommended. It was just to make the point.
+Most of the time we(backend people) are dealing with async functions.
 
-
-
-
-
-
-
-
-
-
-## TLDR;
-
-Declaring a variable before `try-catch` block and using it inside of it is something that I don't like.
+#### What about synchronous functions then?
 
 ```typescript
-let foo: string;
-try {
-  foo = await mad();
-} catch(err: unknown) {
-  // handler error;
-  throw err;
-}
-console.log(foo);
-```
+const $try = <T extends (...args: any[]) => any>(fn: T) => {
+  const Try = class {
+    constructor(private readonly value: T) { }
 
-Better way to handle this situation is to use `.catch()` method on promise.
-
-```typescript
-let foo = await mad().catch(err => {
-  // handle error
-  throw err;
-})
-console.log(foo);
-````
-
-What if `mad()` is not `async` function, well for that we can use `$try` function.
-
-```typescript
-function $try<T>(value: T | Promise<T>): Promise<T> {
-  return Promise.resolve(value);
-}
-
-  let foo = await $try(mad()).catch((err) => {
-    // Handler error
-    throw err
-  })
-```
-
-
-
-
-
-
-
-There has been a times where I had to declare(not sure If did though, don't remember) a variable outside of `try-catch` block
-and use it inside of it to fill the variable with result and use it later after `try-catch` block.
-
-The way I look at try catch block 
-
-
-
-
-```typescript
-function mad() {
-  if (Math.random() > 0.5) {
-    throw new Error('Random error');
+    catch(fn: (err: unknown) => ReturnType<T> | never): ReturnType<T> {
+      try {
+        return this.value()
+      } catch (err) {
+        return fn(err)
+      }
+    }
   }
-  return 'mad';
-}
 
-
-function foo() {
-  let bar: string;
-  try {
-    bar = mad();
-  } catch(err: unknown) {
-    // handler error
-  }
-  console.log(bar)
+  return new Try(fn)
 }
 ```
+`try` is a keyword in JavaScript. So have to settle for `$try` or `try_` whatever suits you.
+`$try()` will return an anonymous class with a `catch()` method which takes a synchronous error handler.
 
+```typescript
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error("DivisionByZero");
+    }
+    return a / b;
+}
 
+function main() {
+    // Example 1: Using a default value with .catch()
+    let result1 = $try(() => divide(10, 0)).catch((_) => 0);
+    console.log(`Result with default: ${result1}`); // prints 0
 
+    // Example 2: Handling the error explicitly
+    const result2 = $try(() => divide(10, 0)).catch((err) => {
+      console.log(`Oops! ${(err as any).message}`);
+      throw err;
+    });
+    console.log(`Result: ${result2}`);
+}
 
+main();
+```
 
+It is not perfect though, It clutters the call site and you can't pass async functions to it as error handler.
 
+I don't use it blindly or `try-catch` block is bad or anything.
+What I am addressing here, could be considered as good practice or not, depends on the situation. 
+I try out different styles and see if it makes more readable code.
 
-// https://www.youtube.com/watch?v=ayaxCCRkNeM
+<p style={{ 
+    marginTop: '64px', 
+    color: '#666666', 
+    textAlign: 'center', 
+    fontStyle: 'italic' 
+}}>
+  Don't Lose the Rhythm
+</p>
