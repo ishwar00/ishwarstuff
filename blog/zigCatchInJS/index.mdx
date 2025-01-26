@@ -51,7 +51,7 @@ No new scope, no bulky `try-catch` block and no extra indentation. It's easy to 
 
 ## Zig's influence
 I really wanted something similar in JavaScript. I tried creating classes and utility functions, but nothing worked
--until I realized we already have something similar in JavaScript, *It was staring me right in the face*.
+-until I realized we already have something similar in JavaScript, *it was staring me right in the face*.
 
 
 To show Zig's way of error handling in JavaScript, I'm going to do something unconventional: 
@@ -97,7 +97,6 @@ async function $try<T extends (...args: any[]) => any>(
   return await fn()
 }
 ```
-This takes a function and calls it in an asynchronous function, executing it asynchronously.
 
 We can use it like this:
 ````typescript
@@ -155,7 +154,7 @@ function main() {
 main();
 ```
 
-That's it, I like to experiment with different styles to see if they make code more readable.
+I do prefer to handle errors at the call site, but I like to experiment with different styles to see if they make code more readable.
 
 Cheerio!
 
@@ -169,7 +168,7 @@ Cheerio!
 </p>
 
 
-[^1]: Well, It depends, If you have huge synchronous task, you don't wanna hog the
-    event-loop, you might consider to divide the work into smaller chunks and
+[^1]: Well, It depends, If you have huge synchronous task, you don't wanna [hog the
+    event-loop](https://nodejs.org/en/learn/asynchronous-work/dont-block-the-event-loop), you might consider to divide the work into smaller chunks and
     handle them asynchronously. I just don't wanna make synchronous functions
     asynchronous it's misleading.
