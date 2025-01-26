@@ -9,7 +9,7 @@ const MyParagraph = (props) => (
 
 const MyLink = (props) => (
   <a
-    style={{ color: '#9E7B5F', textDecoration: 'dotted underline' }}
+    style={{ color: '#9E7B5F', textDecoration: 'none' }}
     {...props}
   />
 )
