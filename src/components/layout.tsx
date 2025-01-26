@@ -3,16 +3,14 @@ import { Link } from 'gatsby'
 import Footer from './footer'
 import {
   container,
-  heading,
   navLinks,
   navLinkItem,
   navLinkText,
   activeNavLink,
-  siteTitle,
   mainContent
 } from './layout.module.css'
 
-const Layout = ({ pageTitle, children }) => {
+const Layout = ({ children }) => {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
 
   return (

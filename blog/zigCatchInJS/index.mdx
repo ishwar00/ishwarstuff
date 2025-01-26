@@ -11,22 +11,10 @@ He was writing something in [Zig](https://ziglang.org/) - can't remember what - 
 Zig's error handling using [try](https://ziglang.org/documentation/master/#try) and [catch](https://ziglang.org/documentation/master/#catch).
 I liked the way it handled errors and immediately wanted something similar in JavaScript.
 
-I find the scoping of JavaScript's `try-catch` block quite annoying as it forces you to declare a variable before using it. 
-This blog is about how Zig's error-handling pattern inspired me to find a workaround for this scoping issue.
-
-```typescript
-let foo: string;
-try {
-  foo = bar();
-} catch(err: unknown) {
-  // Handler error;
-}
-console.log(foo);
-```
-
-Above code is annoying, unless you don't mind huge `try-catch` blocks.
-
 ## Inspiration
+
+import { RoughNotation } from 'react-rough-notation'
+
 Let's take a look at the Zig's error handling with `catch` with an <RoughNotation 
     type="strike-through" 
     color="#9E7B5F" 
@@ -98,16 +86,33 @@ I did not use a `try-catch` block at all, and it looks very similar
 to Zig's `catch` block. Practically, it's the same thing.
 
 
-Making the `divide()` function asynchronous isn't ideal or recommended; this was just to illustrate the concept.
+Making the `divide()` function asynchronous isn't ideal or recommended;[^1] this was just to illustrate the concept.
 Most of the time, we (backend people) deal with asynchronous functions anyway.
+
+Another way to do it is to use a utility function.
+```typescript
+async function $try<T extends (...args: any[]) => any>(
+  fn: T
+): Promise<ReturnType<T>> {
+  return await fn()
+}
+```
+This takes a function and calls it in an asynchronous function, executing it asynchronously.
+
+We can use it like this:
+````typescript
+let _ = await $try(() => divide(10, 1)).catch((_) => 0);
+````
+
+But as you can see, it clutters the call site, making it hard to read.
 
 #### What about synchronous functions then?
 
-I came up with following utility function.
+We can use following utility function which has the same API as the above one:
 
 ```typescript
 const $try = <T extends (...args: any[]) => any>(fn: T) => {
-  const Try = class {
+  const Catch = class {
     constructor(private readonly value: T) { }
 
     catch(fn: (err: unknown) => ReturnType<T> | never): ReturnType<T> {
@@ -119,7 +124,7 @@ const $try = <T extends (...args: any[]) => any>(fn: T) => {
     }
   }
 
-  return new Try(fn)
+  return new Catch(fn)
 }
 ```
 
@@ -150,11 +155,9 @@ function main() {
 main();
 ```
 
-This isn't perfect-it clutters the call site and doesn't support asynchronous functions as error handlers.
+That's it, I like to experiment with different styles to see if they make code more readable.
 
-I don't blindly avoid the `try-catch` block, nor do I think it's inherently bad.
-What I'm addressing here could be considered a good practice—or not—depending on the situation.
-I like to experiment with different styles to see if they make code more readable.
+Cheerio!
 
 <p style={{ 
     marginTop: '64px', 
@@ -164,3 +167,9 @@ I like to experiment with different styles to see if they make code more readabl
 }}>
   Don't Lose the Rhythm
 </p>
+
+
+[^1]: Well, It depends, If you have huge synchronous task, you don't wanna hog the
+    event-loop, you might consider to divide the work into smaller chunks and
+    handle them asynchronously. I just don't wanna make synchronous functions
+    asynchronous it's misleading.

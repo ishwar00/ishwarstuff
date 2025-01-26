@@ -2,13 +2,10 @@
 import React from 'react'
 import { MDXProvider } from '@mdx-js/react'
 import Code from './src/components/code'
-import { RoughNotation } from 'react-rough-notation'
 
 const MyParagraph = (props) => (
   <p style={{ fontSize: '1rem', lineHeight: 1.8 }} {...props} />
 )
-
-const MyRoughNotation = (props) => <RoughNotation {...props} />
 
 const MyLink = (props) => (
   <a
@@ -36,8 +33,7 @@ const components = {
   wrapper: ({ children }) => <>{children}</>,
   p: MyParagraph,
   code,
-  a: MyLink,
-  RoughNotation: MyRoughNotation
+  a: MyLink
 }
 
 export const wrapRootElement = ({ element }) => {

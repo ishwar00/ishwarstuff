@@ -17,6 +17,12 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
 }
 
+/* https://github.com/micromark/micromark-extension-gfm-footnote?tab=readme-ov-file#html */
+#footnote-label {
+  /* display: none; */
+  color: #2b6cb0;
+}
+
 :global(body) {
   margin: 0;
   background-color: var(--background-color);
@@ -47,7 +53,7 @@ pre {
     line-height: 1.7;
   }
   &.language-javascript::before {
-    content: "js";
+    content: 'js';
     background: #f7df1e;
     color: black;
   }

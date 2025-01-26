@@ -12,7 +12,7 @@ import { graphql, Link } from 'gatsby'
 const IndexPage = ({ data }) => {
   return (
     <Layout pageTitle="Home Page">
-      <h1 style={{ marginTop: '3rem' }}>Hallo!</h1>
+      <h1 style={{ marginTop: '3rem' }}>Alo!</h1>
       <p>
         I'm <b>Ishwar</b>, a{' '}
         <RoughNotation
@@ -25,9 +25,9 @@ const IndexPage = ({ data }) => {
           animate={false}
         >
           software engineer
-        </RoughNotation>{' '} developer.
-        I have worked professionally on backend servers. In the past, I have
-        explored and built compilers (frontend and some backend), virtual
+        </RoughNotation>{' '}
+        developer. I have worked professionally on backend servers. In the past,
+        I have explored and built compilers (frontend and some backend), virtual
         machines, a JavaScript runtime, and a few other things.
       </p>
       <p>

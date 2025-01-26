@@ -1,6 +1,9 @@
 import React from 'react'
-import { Highlight, themes } from 'prism-react-renderer'
+import { Highlight, themes, Prism } from 'prism-react-renderer'
 import rangeParser from 'parse-numeric-range'
+
+(typeof global !== "undefined" ? global : window).Prism = Prism
+require("prismjs/components/prism-zig")
 
 /**
  * Reference: https://annarossetti.com/articles/custom-code-blocks/
