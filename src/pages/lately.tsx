@@ -23,15 +23,15 @@ const LatelyPage = ({ data }) => {
         <div className={styles.activities}>
           <div className={styles.activity}>
             <span className={styles.bullet}>Now:</span>
-            Publishing SuvidhaJS to npm
-          </div>
-          <div className={styles.activity}>
-            <span className={styles.bullet}>Later:</span>
             Blog on `retry`
           </div>
           <div className={styles.activity}>
+            <span className={styles.bullet}>Later:</span>
+            "what is time?"
+          </div>
+          <div className={styles.activity}>
             <span className={styles.bullet}>Earlier:</span>
-            Writing 'JavaScript `try-catch` Scoping Sucks'
+            Publishing SuvidhaJS to npm
           </div>
         </div>
 
