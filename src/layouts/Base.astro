@@ -166,7 +166,7 @@ const { title, category } = Astro.props
     background-color: var(--code-bg) !important;
     margin: 1.75rem -1.25rem;
     padding: 2.25rem 1.25rem 1.25rem;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     line-height: 1.6;
   }
   .astro-code::before {
@@ -193,16 +193,6 @@ const { title, category } = Astro.props
   @media (min-width: 42rem) {
     .astro-code {
       border-radius: 6px;
-    }
-  }
-  /* On wide screens code breaks out of the text column so long lines fit. */
-  @media (min-width: 56rem) {
-    .astro-code {
-      margin-inline: -6rem;
-      padding-inline: 2rem;
-    }
-    .astro-code::before {
-      left: 2rem;
     }
   }
 </style>
