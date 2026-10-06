@@ -4,6 +4,7 @@ import '@fontsource-variable/literata'
 import '@fontsource-variable/literata/wght-italic.css'
 import '@fontsource-variable/jetbrains-mono'
 import type { categories } from '../content.config'
+import FontLab from '../components/FontLab.astro'
 
 interface Props {
   title: string
@@ -18,11 +19,35 @@ const { title, category } = Astro.props
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <script is:inline>
+      // Set the theme before first paint: saved choice, else the system setting.
+      try {
+        var t = localStorage.getItem('theme')
+      } catch (e) {}
+      document.documentElement.dataset.theme =
+        t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    </script>
   </head>
   <body data-category={category}>
     <main>
+      <button class="theme" type="button" aria-label="Toggle dark mode">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+          <path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"></path>
+        </svg>
+      </button>
       <slot />
     </main>
+    {import.meta.env.DEV && <FontLab />}
+    <script>
+      document.querySelector('.theme')?.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
+        document.documentElement.dataset.theme = next
+        try {
+          localStorage.setItem('theme', next)
+        } catch {}
+      })
+    </script>
   </body>
 </html>
 
@@ -44,21 +69,20 @@ const { title, category } = Astro.props
     --accent: var(--eng);
     --body-font: var(--sans);
     --body-leading: 1.65;
-    color-scheme: light dark;
+    color-scheme: light;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: #14171a;
-      --ink: #dfe3e6;
-      --muted: #8d969f;
-      --rule: #2a2f34;
-      --code-bg: #1b1f23;
-      --eng: #93a5ff;
-      --life: #d895b8;
-    }
-    .astro-code span {
-      color: var(--shiki-dark) !important;
-    }
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --paper: #14171a;
+    --ink: #dfe3e6;
+    --muted: #8d969f;
+    --rule: #2a2f34;
+    --code-bg: #1b1f23;
+    --eng: #93a5ff;
+    --life: #d895b8;
+  }
+  [data-theme='dark'] .astro-code span {
+    color: var(--shiki-dark) !important;
   }
   [data-category='life'] {
     --accent: var(--life);
@@ -71,14 +95,29 @@ const { title, category } = Astro.props
     background: var(--paper);
     color: var(--ink);
     font-family: var(--body-font);
-    font-size: 1.125rem;
+    font-size: 1rem;
     line-height: var(--body-leading);
     -webkit-font-smoothing: antialiased;
   }
   main {
+    position: relative;
     max-width: 38rem;
     margin: 0 auto;
     padding: 5rem 1.25rem 6rem;
+  }
+  .theme {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.25rem;
+    padding: 0.4rem;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    line-height: 0;
+  }
+  .theme:hover {
+    color: var(--ink);
   }
 
   h1,
@@ -89,11 +128,11 @@ const { title, category } = Astro.props
     letter-spacing: -0.01em;
   }
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
     margin: 2.75rem 0 0.75rem;
   }
   h3 {
-    font-size: 1.2rem;
+    font-size: 1.125rem;
     margin: 2rem 0 0.5rem;
   }
 
@@ -132,7 +171,7 @@ const { title, category } = Astro.props
     background-color: var(--code-bg) !important;
     margin: 1.75rem -1.25rem;
     padding: 2.25rem 1.25rem 1.25rem;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     line-height: 1.6;
   }
   .astro-code::before {
