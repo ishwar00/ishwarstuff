@@ -47,6 +47,7 @@ const fmt = (d: Date) =>
         {t.label}
       </a>
     ))}
+    <span class="indicator" aria-hidden="true"></span>
   </nav>
 
   <ul>
@@ -64,6 +65,22 @@ const fmt = (d: Date) =>
   const tabs = [...document.querySelectorAll<HTMLAnchorElement>('nav a')]
   const items = [...document.querySelectorAll<HTMLLIElement>('li[data-category]')]
   const empty = document.querySelector<HTMLElement>('.empty')!
+  const nav = document.querySelector<HTMLElement>('nav')!
+  const indicator = nav.querySelector<HTMLElement>('.indicator')!
+
+  // Slide the underline under the current tab, taking on that tab's accent color.
+  const moveIndicator = (animate: boolean) => {
+    const tab = tabs.find((t) => t.hasAttribute('aria-current')) ?? tabs[0]
+    if (!animate) indicator.style.transition = 'none'
+    indicator.style.width = `${tab.offsetWidth}px`
+    indicator.style.transform = `translateX(${tab.offsetLeft}px)`
+    indicator.style.backgroundColor = getComputedStyle(tab).getPropertyValue('--accent')
+    if (!animate) {
+      indicator.offsetWidth // apply the jump before turning transitions back on
+      indicator.style.transition = ''
+    }
+    nav.classList.add('sliding')
+  }
 
   const show = (path: string) => {
     const tab = tabs.find((t) => t.pathname === path) ?? tabs[0]
@@ -74,7 +91,12 @@ const fmt = (d: Date) =>
     }
     for (const li of items) li.hidden = !!key && li.dataset.category !== key
     empty.hidden = items.some((li) => !li.hidden)
+    moveIndicator(true)
   }
+
+  moveIndicator(false)
+  document.fonts.ready.then(() => moveIndicator(false))
+  addEventListener('resize', () => moveIndicator(false))
 
   for (const tab of tabs) {
     tab.addEventListener('click', (e) => {
@@ -111,6 +133,7 @@ const fmt = (d: Date) =>
   }
 
   nav {
+    position: relative;
     display: flex;
     gap: 1.75rem;
     margin-top: 4rem;
@@ -133,6 +156,29 @@ const fmt = (d: Date) =>
   nav a[aria-current='page'] {
     color: var(--ink);
     border-bottom-color: var(--accent);
+  }
+  /* With JavaScript, a single sliding bar replaces the per-tab underline. */
+  .indicator {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    opacity: 0;
+    transition:
+      transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+      width 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+      background-color 0.3s ease;
+  }
+  nav.sliding .indicator {
+    opacity: 1;
+  }
+  nav.sliding a[aria-current='page'] {
+    border-bottom-color: transparent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .indicator {
+      transition: none;
+    }
   }
 
   li[hidden],

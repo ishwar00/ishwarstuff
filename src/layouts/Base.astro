@@ -172,6 +172,10 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     margin: 2rem 0 0.5rem;
   }
 
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
   a {
     color: var(--accent);
     text-decoration-thickness: 1px;
