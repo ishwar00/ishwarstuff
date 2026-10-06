@@ -13,10 +13,10 @@ const posts = (await getCollection('posts'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 
 const tabs = [
-  { label: 'All', href: '/', active: !category },
-  { label: 'Engineering', href: '/engineering', active: category === 'engineering' },
-  { label: 'Life', href: '/life', active: category === 'life' }
-]
+  { label: 'All', href: '/', key: undefined },
+  { label: 'Engineering', href: '/engineering', key: 'engineering' },
+  { label: 'Life', href: '/life', key: 'life' }
+] as const
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
@@ -24,29 +24,34 @@ const fmt = (d: Date) =>
 
 <Base title="Ishwar">
   <h1>Ishwar</h1>
-  <p>
+  <p class="intro">
     I build software, mostly backend. I've poked at compilers, VMs, and a JavaScript
     runtime. This is where I write things down: some engineering, some life.
   </p>
-  <p class="links">
-    <a href="https://github.com/ishwar00">github</a> ·
-    <a href="https://flowcv.com/resume/7na4abrtft">resume</a> ·
-    <a href="https://x.com/Ishwar71078132">x</a>
+  <p class="elsewhere">
+    Code on <a href="https://github.com/ishwar00">GitHub</a>,{' '}
+    work history in my <a href="https://flowcv.com/resume/7na4abrtft">resume</a>,{' '}
+    short thoughts on <a href="https://x.com/Ishwar71078132">X</a>.
   </p>
 
-  <nav>
+  <nav aria-label="Filter posts">
     {tabs.map((t) => (
-      <a href={t.href} aria-current={t.active ? 'page' : undefined}>{t.label}</a>
+      <a
+        href={t.href}
+        data-category={t.key}
+        aria-current={t.key === category ? 'page' : undefined}
+      >
+        {t.label}
+      </a>
     ))}
   </nav>
 
   {posts.length === 0 ? (
-    <p class="empty">Nothing here yet.</p>
+    <p class="empty">No posts here yet.</p>
   ) : (
     <ul>
       {posts.map((p) => (
-        <li>
-          {!category && <span class="tag">{p.data.category === 'engineering' ? 'eng' : 'life'}</span>}
+        <li data-category={p.data.category}>
           <a href={`/${p.data.category}/${p.id}`}>{p.data.title}</a>
           <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
         </li>
@@ -57,55 +62,88 @@ const fmt = (d: Date) =>
 
 <style>
   h1 {
-    margin-top: 0;
+    font-size: 2.75rem;
+    letter-spacing: -0.03em;
+    margin: 0 0 1.5rem;
   }
-  .links {
+  .intro {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin: 0 0 1rem;
+  }
+  .elsewhere {
     color: var(--muted);
+    font-size: 1rem;
+    margin: 0;
   }
+  .elsewhere a {
+    color: inherit;
+  }
+
   nav {
     display: flex;
-    gap: 1.5rem;
-    margin-top: 3rem;
+    gap: 1.75rem;
+    margin-top: 4rem;
     border-bottom: 1px solid var(--rule);
   }
   nav a {
     color: var(--muted);
     text-decoration: none;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.6rem;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
   }
+  /* Each tab is set in its own space's voice, so the tabs double as the legend. */
+  nav a[data-category='life'] {
+    font-family: var(--serif);
+    font-style: italic;
+  }
+  nav a:hover {
+    color: var(--ink);
+  }
   nav a[aria-current='page'] {
-    color: var(--text);
+    color: var(--ink);
     border-bottom-color: var(--accent);
   }
+
   ul {
     list-style: none;
     padding: 0;
+    margin: 1rem 0 0;
   }
   li {
     display: flex;
     align-items: baseline;
-    gap: 0.75rem;
-    padding: 0.6rem 0;
+    gap: 1rem;
+    padding: 0.7rem 0;
   }
   li a {
-    color: var(--text);
-    text-decoration: none;
     flex: 1;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 550;
+    letter-spacing: -0.01em;
+  }
+  li[data-category='life'] a {
+    font-family: var(--serif);
+    font-weight: 450;
+    letter-spacing: 0;
   }
   li a:hover {
     color: var(--accent);
-  }
-  .tag {
-    font-family: ui-monospace, monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-    width: 2.5rem;
   }
   time,
   .empty {
     color: var(--muted);
     font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 30rem) {
+    li {
+      flex-direction: column;
+      gap: 0.1rem;
+    }
   }
 </style>

@@ -20,7 +20,7 @@ const date = post.data.date.toLocaleDateString('en-US', {
 })
 ---
 
-<Base title={post.data.title}>
+<Base title={post.data.title} category={post.data.category}>
   <a href="/" class="back">Ishwar</a>
   <article>
     <h1>{post.data.title}</h1>
@@ -31,14 +31,24 @@ const date = post.data.date.toLocaleDateString('en-US', {
 
 <style>
   .back {
+    font-family: var(--sans);
+    font-weight: 650;
     color: var(--muted);
     text-decoration: none;
   }
+  .back:hover {
+    color: var(--ink);
+  }
   h1 {
-    margin-bottom: 0.25rem;
+    font-size: 2.25rem;
+    letter-spacing: -0.02em;
+    margin: 3.5rem 0 0.5rem;
   }
   time {
+    display: block;
+    font-family: var(--sans);
     color: var(--muted);
     font-size: 0.9rem;
+    margin-bottom: 2.5rem;
   }
 </style>

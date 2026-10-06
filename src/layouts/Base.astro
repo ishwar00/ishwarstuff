@@ -1,8 +1,15 @@
 ---
+import '@fontsource-variable/schibsted-grotesk'
+import '@fontsource-variable/literata'
+import '@fontsource-variable/literata/wght-italic.css'
+import '@fontsource-variable/jetbrains-mono'
+import type { categories } from '../content.config'
+
 interface Props {
   title: string
+  category?: (typeof categories)[number]
 }
-const { title } = Astro.props
+const { title, category } = Astro.props
 ---
 
 <!doctype html>
@@ -12,7 +19,7 @@ const { title } = Astro.props
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
   </head>
-  <body>
+  <body data-category={category}>
     <main>
       <slot />
     </main>
@@ -21,66 +28,138 @@ const { title } = Astro.props
 
 <style is:global>
   :root {
-    --bg: #fdfaf6;
-    --text: #3b3632;
-    --muted: #8a817a;
-    --accent: #b5533f;
-    --rule: #ebe4dc;
-    --code-bg: #f4efe8;
+    --paper: #f5f6f2;
+    --ink: #1f252b;
+    --muted: #68717b;
+    --rule: #dfe2dc;
+    --code-bg: #eceee8;
+    --eng: #2c46c4;
+    --life: #8c3a62;
+
+    --sans: 'Schibsted Grotesk Variable', system-ui, sans-serif;
+    --serif: 'Literata Variable', Georgia, serif;
+    --mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+    /* Home and engineering pages speak in the sans voice; life pages override below. */
+    --accent: var(--eng);
+    --body-font: var(--sans);
+    --body-leading: 1.65;
     color-scheme: light dark;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1c1917;
-      --text: #e7e2dc;
-      --muted: #9a918a;
-      --accent: #e08a78;
-      --rule: #34302c;
-      --code-bg: #26221f;
+      --paper: #14171a;
+      --ink: #dfe3e6;
+      --muted: #8d969f;
+      --rule: #2a2f34;
+      --code-bg: #1b1f23;
+      --eng: #93a5ff;
+      --life: #d895b8;
     }
-    .astro-code,
     .astro-code span {
       color: var(--shiki-dark) !important;
-      background-color: var(--shiki-dark-bg) !important;
     }
+  }
+  [data-category='life'] {
+    --accent: var(--life);
+    --body-font: var(--serif);
+    --body-leading: 1.75;
   }
 
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font: 1.0625rem/1.7 system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body-font);
+    font-size: 1.125rem;
+    line-height: var(--body-leading);
+    -webkit-font-smoothing: antialiased;
   }
   main {
-    max-width: 650px;
+    max-width: 38rem;
     margin: 0 auto;
-    padding: 4rem 1rem;
+    padding: 5rem 1.25rem 6rem;
   }
-  a {
-    color: var(--accent);
-  }
+
   h1,
   h2,
   h3 {
-    line-height: 1.25;
+    line-height: 1.2;
+    font-weight: 650;
+    letter-spacing: -0.01em;
   }
+  h2 {
+    font-size: 1.5rem;
+    margin: 2.75rem 0 0.75rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    margin: 2rem 0 0.5rem;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  del {
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+  }
+
   code {
-    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-    font-size: 0.875em;
+    font-family: var(--mono);
+    font-size: 0.85em;
   }
   :not(pre) > code {
     background: var(--code-bg);
     padding: 0.1em 0.35em;
-    border-radius: 4px;
+    border-radius: 3px;
   }
-  pre {
-    padding: 1rem;
-    border-radius: 6px;
-    overflow-x: auto;
+
+  /* Shiki code blocks: own background, language name, line numbers. */
+  .astro-code {
+    position: relative;
+    background-color: var(--code-bg) !important;
+    margin: 1.75rem -1.25rem;
+    padding: 2.25rem 1.25rem 1.25rem;
     font-size: 0.875rem;
+    line-height: 1.6;
   }
-  del {
-    text-decoration-color: var(--accent);
-    text-decoration-thickness: 2px;
+  .astro-code::before {
+    content: attr(data-language);
+    position: absolute;
+    top: 0.6rem;
+    left: 1.25rem;
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .astro-code code {
+    counter-reset: line;
+  }
+  .astro-code .line::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 2ch;
+    margin-right: 1.5ch;
+    text-align: right;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+  @media (min-width: 42rem) {
+    .astro-code {
+      border-radius: 6px;
+    }
   }
 </style>
