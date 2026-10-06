@@ -115,6 +115,18 @@ const { title, category } = Astro.props
   .theme:hover {
     color: var(--ink);
   }
+  /* The circle turns a half turn with each theme switch. */
+  .theme svg {
+    transition: transform 0.4s ease;
+  }
+  [data-theme='dark'] .theme svg {
+    transform: rotate(180deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .theme svg {
+      transition: none;
+    }
+  }
 
   h1,
   h2,
