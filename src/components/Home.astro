@@ -63,11 +63,9 @@ const fmt = (d: Date) =>
 <style>
   h1 {
     font-size: 2.5rem;
-    letter-spacing: -0.03em;
     margin: 0 0 1.5rem;
   }
   .intro {
-    font-family: var(--serif);
     font-size: 1.125rem;
     line-height: 1.6;
     margin: 0 0 1rem;
@@ -94,9 +92,8 @@ const fmt = (d: Date) =>
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
   }
-  /* Each tab is set in its own space's voice, so the tabs double as the legend. */
+  /* Life is set in italic everywhere on this page, so the tabs double as the legend. */
   nav a[data-category='life'] {
-    font-family: var(--serif);
     font-style: italic;
   }
   nav a:hover {
@@ -123,13 +120,11 @@ const fmt = (d: Date) =>
     color: var(--ink);
     text-decoration: none;
     font-size: 1.0625rem;
-    font-weight: 550;
-    letter-spacing: -0.01em;
+    font-weight: 600;
   }
   li[data-category='life'] a {
-    font-family: var(--serif);
-    font-weight: 450;
-    letter-spacing: 0;
+    font-style: italic;
+    font-weight: 400;
   }
   li a:hover {
     color: var(--accent);

@@ -1,10 +1,8 @@
 ---
-import '@fontsource-variable/schibsted-grotesk'
-import '@fontsource-variable/literata'
-import '@fontsource-variable/literata/wght-italic.css'
-import '@fontsource-variable/jetbrains-mono'
+import '@fontsource/iosevka/400.css'
+import '@fontsource/iosevka/400-italic.css'
+import '@fontsource/iosevka/600.css'
 import type { categories } from '../content.config'
-import FontLab from '../components/FontLab.astro'
 
 interface Props {
   title: string
@@ -38,7 +36,6 @@ const { title, category } = Astro.props
       </button>
       <slot />
     </main>
-    {import.meta.env.DEV && <FontLab />}
     <script>
       document.querySelector('.theme')?.addEventListener('click', () => {
         const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
@@ -61,13 +58,10 @@ const { title, category } = Astro.props
     --eng: #2c46c4;
     --life: #8c3a62;
 
-    --sans: 'Schibsted Grotesk Variable', system-ui, sans-serif;
-    --serif: 'Literata Variable', Georgia, serif;
-    --mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+    --font: 'Iosevka', ui-monospace, monospace;
 
-    /* Home and engineering pages speak in the sans voice; life pages override below. */
+    /* Home and engineering pages use the cobalt accent; life pages override below. */
     --accent: var(--eng);
-    --body-font: var(--sans);
     --body-leading: 1.65;
     color-scheme: light;
   }
@@ -86,15 +80,17 @@ const { title, category } = Astro.props
   }
   [data-category='life'] {
     --accent: var(--life);
-    --body-font: var(--serif);
     --body-leading: 1.75;
   }
 
+  html {
+    font-size: 93.75%; /* 15px at the browser default, still scales with user settings */
+  }
   body {
     margin: 0;
     background: var(--paper);
     color: var(--ink);
-    font-family: var(--body-font);
+    font-family: var(--font);
     font-size: 1rem;
     line-height: var(--body-leading);
     -webkit-font-smoothing: antialiased;
@@ -124,8 +120,7 @@ const { title, category } = Astro.props
   h2,
   h3 {
     line-height: 1.2;
-    font-weight: 650;
-    letter-spacing: -0.01em;
+    font-weight: 600;
   }
   h2 {
     font-size: 1.375rem;
@@ -156,8 +151,8 @@ const { title, category } = Astro.props
   }
 
   code {
-    font-family: var(--mono);
-    font-size: 0.85em;
+    font-family: inherit;
+    font-size: 0.95em;
   }
   :not(pre) > code {
     background: var(--code-bg);
@@ -171,7 +166,7 @@ const { title, category } = Astro.props
     background-color: var(--code-bg) !important;
     margin: 1.75rem -1.25rem;
     padding: 2.25rem 1.25rem 1.25rem;
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     line-height: 1.6;
   }
   .astro-code::before {
@@ -179,7 +174,6 @@ const { title, category } = Astro.props
     position: absolute;
     top: 0.6rem;
     left: 1.25rem;
-    font-family: var(--sans);
     font-size: 0.75rem;
     color: var(--muted);
   }
@@ -199,6 +193,16 @@ const { title, category } = Astro.props
   @media (min-width: 42rem) {
     .astro-code {
       border-radius: 6px;
+    }
+  }
+  /* On wide screens code breaks out of the text column so long lines fit. */
+  @media (min-width: 56rem) {
+    .astro-code {
+      margin-inline: -6rem;
+      padding-inline: 2rem;
+    }
+    .astro-code::before {
+      left: 2rem;
     }
   }
 </style>
