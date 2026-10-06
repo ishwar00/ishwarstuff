@@ -6,9 +6,14 @@ import type { categories } from '../content.config'
 
 interface Props {
   title: string
+  description?: string
   category?: (typeof categories)[number]
 }
-const { title, category } = Astro.props
+const {
+  title,
+  description = 'Ishwar writes things down: some engineering, some life.',
+  category
+} = Astro.props
 
 // font-display: fallback waits up to 100ms for Iosevka before showing the fallback font,
 // so cached or preloaded fonts never swap in visibly.
@@ -23,6 +28,9 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- Preload the main weights so the first paint already uses Iosevka (no font swap on navigation). -->
     <link rel="preload" href={iosevka400} as="font" type="font/woff2" crossorigin />
@@ -114,6 +122,10 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
   .theme-switching::view-transition-new(root) {
     animation: none;
     mix-blend-mode: normal;
+  }
+  /* Elements shared between pages must not be captured separately, or the circle would skip them. */
+  .theme-switching .vt-shared {
+    view-transition-name: none !important;
   }
 
   :root {
@@ -234,6 +246,11 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
   }
   :target {
     scroll-margin-top: 2rem;
+  }
+  #footnote-label {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 3rem;
   }
   .footnotes li:target {
     background: var(--code-bg);
