@@ -223,9 +223,11 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
   /* Shiki code blocks: own background, language name, line numbers. */
   .astro-code {
     position: relative;
-    background-color: var(--code-bg) !important;
-    margin: 1.75rem -1.25rem;
-    padding: 2.25rem 1.25rem 1.25rem;
+    background-color: transparent !important;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    margin: 1.75rem 0;
+    padding: 2.25rem 1rem 1rem;
     font-size: 0.875rem;
     line-height: 1.6;
     scrollbar-width: thin;
@@ -235,7 +237,7 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     content: attr(data-language);
     position: absolute;
     top: 0.6rem;
-    left: 1.25rem;
+    left: 1rem;
     font-size: 0.75rem;
     color: var(--muted);
   }
@@ -251,10 +253,5 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     text-align: right;
     color: var(--muted);
     opacity: 0.6;
-  }
-  @media (min-width: 42rem) {
-    .astro-code {
-      border-radius: 6px;
-    }
   }
 </style>
