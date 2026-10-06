@@ -224,10 +224,8 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
   .astro-code {
     position: relative;
     background-color: transparent !important;
-    border: 1px solid var(--rule);
-    border-radius: 6px;
     margin: 1.75rem 0;
-    padding: 2.25rem 1rem 1rem;
+    padding: 1.6rem 0 0.5rem;
     font-size: 0.875rem;
     line-height: 1.6;
     scrollbar-width: thin;
@@ -236,8 +234,8 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
   .astro-code::before {
     content: attr(data-language);
     position: absolute;
-    top: 0.6rem;
-    left: 1rem;
+    top: 0;
+    left: 0;
     font-size: 0.75rem;
     color: var(--muted);
   }
