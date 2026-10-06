@@ -8,9 +8,12 @@ interface Props {
 }
 const { category } = Astro.props
 
-const posts = (await getCollection('posts'))
-  .filter((p) => !category || p.data.category === category)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+// Every tab page renders all posts; the tab only decides which are hidden.
+// The script below switches tabs in place, so a tab click never reloads the page.
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+)
+const shown = (c: string) => !category || c === category
 
 const tabs = [
   { label: 'All', href: '/', key: undefined },
@@ -46,19 +49,44 @@ const fmt = (d: Date) =>
     ))}
   </nav>
 
-  {posts.length === 0 ? (
-    <p class="empty">No posts here yet.</p>
-  ) : (
-    <ul>
-      {posts.map((p) => (
-        <li data-category={p.data.category}>
-          <a href={`/${p.data.category}/${p.id}`}>{p.data.title}</a>
-          <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
-        </li>
-      ))}
-    </ul>
-  )}
+  <ul>
+    {posts.map((p) => (
+      <li data-category={p.data.category} hidden={!shown(p.data.category)}>
+        <a href={`/${p.data.category}/${p.id}`}>{p.data.title}</a>
+        <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+      </li>
+    ))}
+  </ul>
+  <p class="empty" hidden={posts.some((p) => shown(p.data.category))}>No posts here yet.</p>
 </Base>
+
+<script>
+  const tabs = [...document.querySelectorAll<HTMLAnchorElement>('nav a')]
+  const items = [...document.querySelectorAll<HTMLLIElement>('li[data-category]')]
+  const empty = document.querySelector<HTMLElement>('.empty')!
+
+  const show = (path: string) => {
+    const tab = tabs.find((t) => t.pathname === path) ?? tabs[0]
+    const key = tab.dataset.category
+    for (const t of tabs) {
+      if (t === tab) t.setAttribute('aria-current', 'page')
+      else t.removeAttribute('aria-current')
+    }
+    for (const li of items) li.hidden = !!key && li.dataset.category !== key
+    empty.hidden = items.some((li) => !li.hidden)
+  }
+
+  for (const tab of tabs) {
+    tab.addEventListener('click', (e) => {
+      // Let modified clicks (new tab, new window) behave like normal links.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+      e.preventDefault()
+      if (tab.pathname !== location.pathname) history.pushState(null, '', tab.href)
+      show(tab.pathname)
+    })
+  }
+  addEventListener('popstate', () => show(location.pathname))
+</script>
 
 <style>
   h1 {
@@ -107,6 +135,10 @@ const fmt = (d: Date) =>
     border-bottom-color: var(--accent);
   }
 
+  li[hidden],
+  .empty[hidden] {
+    display: none;
+  }
   ul {
     list-style: none;
     padding: 0;
