@@ -1,7 +1,7 @@
 ---
-import '@fontsource/iosevka/400.css'
-import '@fontsource/iosevka/400-italic.css'
-import '@fontsource/iosevka/600.css'
+import iosevka400 from '@fontsource/iosevka/files/iosevka-latin-400-normal.woff2?url'
+import iosevka400i from '@fontsource/iosevka/files/iosevka-latin-400-italic.woff2?url'
+import iosevka600 from '@fontsource/iosevka/files/iosevka-latin-600-normal.woff2?url'
 import type { categories } from '../content.config'
 
 interface Props {
@@ -9,6 +9,12 @@ interface Props {
   category?: (typeof categories)[number]
 }
 const { title, category } = Astro.props
+
+// font-display: fallback waits up to 100ms for Iosevka before showing the fallback font,
+// so cached or preloaded fonts never swap in visibly.
+const face = (src: string, weight: number, style: string) =>
+  `@font-face{font-family:'Iosevka';font-style:${style};font-weight:${weight};font-display:fallback;src:url(${src}) format('woff2')}`
+const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'italic'), face(iosevka600, 600, 'normal')].join('')
 ---
 
 <!doctype html>
@@ -17,6 +23,11 @@ const { title, category } = Astro.props
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Preload the main weights so the first paint already uses Iosevka (no font swap on navigation). -->
+    <link rel="preload" href={iosevka400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={iosevka600} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFaces}></style>
     <script is:inline>
       // Set the theme before first paint: saved choice, else the system setting.
       try {
@@ -28,7 +39,7 @@ const { title, category } = Astro.props
   </head>
   <body data-category={category}>
     <main>
-      <button class="theme" type="button" aria-label="Toggle dark mode">
+      <button class="theme" type="button" aria-label="Dark mode">
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
           <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
           <path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"></path>
@@ -37,18 +48,36 @@ const { title, category } = Astro.props
       <slot />
     </main>
     <script>
-      document.querySelector('.theme')?.addEventListener('click', () => {
+      const button = document.querySelector<HTMLButtonElement>('.theme')!
+      const sync = () => {
+        const dark = document.documentElement.dataset.theme === 'dark'
+        button.setAttribute('aria-pressed', String(dark))
+        button.title = dark ? 'Switch to light mode' : 'Switch to dark mode'
+      }
+      sync()
+      button.addEventListener('click', () => {
         const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
         document.documentElement.dataset.theme = next
         try {
           localStorage.setItem('theme', next)
         } catch {}
+        sync()
       })
     </script>
   </body>
 </html>
 
 <style is:global>
+  /* Cross-fade between pages instead of blanking and repainting on every click. */
+  @view-transition {
+    navigation: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @view-transition {
+      navigation: none;
+    }
+  }
+
   :root {
     --paper: #f5f6f2;
     --ink: #1f252b;
@@ -157,6 +186,18 @@ const { title, category } = Astro.props
     border-radius: 2px;
   }
 
+  /* Footnotes: a tappable marker, and a little room above whatever a jump lands on. */
+  sup a {
+    padding: 0.15em 0.3em;
+  }
+  :target {
+    scroll-margin-top: 2rem;
+  }
+  .footnotes li:target {
+    background: var(--code-bg);
+    border-radius: 4px;
+  }
+
   .signoff {
     margin-top: 3rem;
     text-align: center;
@@ -187,6 +228,8 @@ const { title, category } = Astro.props
     padding: 2.25rem 1.25rem 1.25rem;
     font-size: 0.875rem;
     line-height: 1.6;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
   }
   .astro-code::before {
     content: attr(data-language);

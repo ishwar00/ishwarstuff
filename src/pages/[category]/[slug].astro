@@ -27,9 +27,23 @@ const date = post.data.date.toLocaleDateString('en-US', {
     <time datetime={post.data.date.toISOString()}>{date}</time>
     <Content />
   </article>
+  <footer>
+    <a href="/">All posts</a>
+  </footer>
 </Base>
 
 <style>
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  footer a {
+    color: var(--muted);
+  }
+  footer a:hover {
+    color: var(--ink);
+  }
   .back {
     font-weight: 600;
     color: var(--muted);
