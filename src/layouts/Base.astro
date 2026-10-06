@@ -1,0 +1,86 @@
+---
+interface Props {
+  title: string
+}
+const { title } = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #fdfaf6;
+    --text: #3b3632;
+    --muted: #8a817a;
+    --accent: #b5533f;
+    --rule: #ebe4dc;
+    --code-bg: #f4efe8;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1917;
+      --text: #e7e2dc;
+      --muted: #9a918a;
+      --accent: #e08a78;
+      --rule: #34302c;
+      --code-bg: #26221f;
+    }
+    .astro-code,
+    .astro-code span {
+      color: var(--shiki-dark) !important;
+      background-color: var(--shiki-dark-bg) !important;
+    }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 1.0625rem/1.7 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  main {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 4rem 1rem;
+  }
+  a {
+    color: var(--accent);
+  }
+  h1,
+  h2,
+  h3 {
+    line-height: 1.25;
+  }
+  code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.875em;
+  }
+  :not(pre) > code {
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+  }
+  pre {
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.875rem;
+  }
+  del {
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+  }
+</style>
