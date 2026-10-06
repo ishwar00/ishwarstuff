@@ -104,6 +104,11 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
       navigation: none;
     }
   }
+  /* Page switches: the clicked title and the site name glide into place; everything else cross-fades. */
+  ::view-transition-group(*) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
   /* Theme switch: replace the default cross-fade with the circle reveal set up in the script. */
   .theme-switching::view-transition-old(root),
   .theme-switching::view-transition-new(root) {

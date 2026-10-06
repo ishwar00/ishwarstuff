@@ -21,9 +21,9 @@ const date = post.data.date.toLocaleDateString('en-US', {
 ---
 
 <Base title={post.data.title} category={post.data.category}>
-  <a href="/" class="back">Ishwar</a>
+  <a href="/" class="back" style="view-transition-name: site-name">Ishwar</a>
   <article>
-    <h1>{post.data.title}</h1>
+    <h1><span style={`display: inline-block; view-transition-name: post-${post.id}`}>{post.data.title}</span></h1>
     <time datetime={post.data.date.toISOString()}>{date}</time>
     <Content />
   </article>
