@@ -2,7 +2,7 @@
 export const projects = [
   {
     name: 'suvidha.js',
-    what: 'Typed Express.js helpers, TypeScript',
+    what: 'Type-safe Express route handlers with Zod validation, TypeScript',
     year: 2024,
     url: 'https://suvidhajs.is-cool.dev'
   },
