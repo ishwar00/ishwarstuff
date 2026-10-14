@@ -2,9 +2,10 @@
 import { getCollection } from 'astro:content'
 import Base from '../layouts/Base.astro'
 import type { categories } from '../content.config'
+import { projects } from '../projects'
 
 interface Props {
-  category?: (typeof categories)[number]
+  category?: (typeof categories)[number] | 'projects'
 }
 const { category } = Astro.props
 
@@ -14,11 +15,13 @@ const posts = (await getCollection('posts')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 )
 const shown = (c: string) => !category || c === category
+const onProjects = category === 'projects'
 
 const tabs = [
   { label: 'All', href: '/', key: undefined },
   { label: 'Engineering', href: '/engineering', key: 'engineering' },
-  { label: 'Life', href: '/life', key: 'life' }
+  { label: 'Life', href: '/life', key: 'life' },
+  { label: 'Projects', href: '/projects', key: 'projects' }
 ] as const
 
 const fmt = (d: Date) =>
@@ -50,7 +53,7 @@ const fmt = (d: Date) =>
     <span class="indicator" aria-hidden="true"></span>
   </nav>
 
-  <ul>
+  <ul class="posts" hidden={onProjects}>
     {posts.map((p) => (
       <li data-category={p.data.category} hidden={!shown(p.data.category)}>
         <a href={`/${p.data.category}/${p.id}`}>
@@ -60,13 +63,26 @@ const fmt = (d: Date) =>
       </li>
     ))}
   </ul>
-  <p class="empty" hidden={posts.some((p) => shown(p.data.category))}>No posts here yet.</p>
+  <p class="empty" hidden={onProjects || posts.some((p) => shown(p.data.category))}>
+    No posts here yet.
+  </p>
+  <ul class="projects" hidden={!onProjects}>
+    {projects.map((p) => (
+      <li>
+        <a href={p.url}>{p.name}</a>
+        <span class="what">{p.what}</span>
+        <span class="year">{p.year}</span>
+      </li>
+    ))}
+  </ul>
 </Base>
 
 <script>
   const tabs = [...document.querySelectorAll<HTMLAnchorElement>('nav a')]
   const items = [...document.querySelectorAll<HTMLLIElement>('li[data-category]')]
   const empty = document.querySelector<HTMLElement>('.empty')!
+  const postList = document.querySelector<HTMLElement>('.posts')!
+  const projectList = document.querySelector<HTMLElement>('.projects')!
   const nav = document.querySelector<HTMLElement>('nav')!
   const indicator = nav.querySelector<HTMLElement>('.indicator')!
 
@@ -74,8 +90,10 @@ const fmt = (d: Date) =>
   const moveIndicator = (animate: boolean) => {
     const tab = tabs.find((t) => t.hasAttribute('aria-current')) ?? tabs[0]
     if (!animate) indicator.style.transition = 'none'
-    indicator.style.width = `${tab.offsetWidth}px`
-    indicator.style.transform = `translateX(${tab.offsetLeft}px)`
+    // Exact (sub-pixel) box; offsetLeft/offsetWidth round and leave the bar half a pixel off.
+    const box = tab.getBoundingClientRect()
+    indicator.style.width = `${box.width}px`
+    indicator.style.transform = `translateX(${box.left - nav.getBoundingClientRect().left}px)`
     indicator.style.backgroundColor = getComputedStyle(tab).getPropertyValue('--accent')
     if (!animate) {
       indicator.offsetWidth // apply the jump before turning transitions back on
@@ -91,8 +109,11 @@ const fmt = (d: Date) =>
       if (t === tab) t.setAttribute('aria-current', 'page')
       else t.removeAttribute('aria-current')
     }
+    const onProjects = key === 'projects'
+    postList.hidden = onProjects
+    projectList.hidden = !onProjects
     for (const li of items) li.hidden = !!key && li.dataset.category !== key
-    empty.hidden = items.some((li) => !li.hidden)
+    empty.hidden = onProjects || items.some((li) => !li.hidden)
     moveIndicator(true)
   }
 
@@ -153,6 +174,10 @@ const fmt = (d: Date) =>
   nav a[data-category='life'] {
     font-style: italic;
   }
+  /* Projects aren't posts, so their tab sits apart at the far end. */
+  nav a[data-category='projects'] {
+    margin-left: auto;
+  }
   nav a:hover {
     color: var(--ink);
   }
@@ -185,7 +210,8 @@ const fmt = (d: Date) =>
   }
 
   li[hidden],
-  .empty[hidden] {
+  .empty[hidden],
+  ul[hidden] {
     display: none;
   }
   ul {
@@ -222,10 +248,36 @@ const fmt = (d: Date) =>
     font-size: 0.875rem;
     font-variant-numeric: tabular-nums;
   }
+  .projects li a {
+    flex: 0 0 9rem;
+  }
+  .what {
+    flex: 1;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .year {
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
   @media (max-width: 30rem) {
     li {
       flex-direction: column;
       gap: 0.1rem;
+    }
+    /* Name and year on one line, description underneath. */
+    .projects li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: 1rem;
+    }
+    .projects .year {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .projects .what {
+      grid-column: 1 / -1;
     }
   }
 </style>
