@@ -6,6 +6,8 @@ export default defineConfig({
   site: 'https://ishwarstuff.vercel.app',
   integrations: [mdx()],
   markdown: {
+    // Straight quotes, like a terminal; curly ones look out of place in a monospace font.
+    smartypants: false,
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' }
     }

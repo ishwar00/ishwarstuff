@@ -15,8 +15,9 @@ const {
   category
 } = Astro.props
 
-// font-display: fallback waits up to 100ms for Iosevka before showing the fallback font,
-// so cached or preloaded fonts never swap in visibly.
+// SF Mono is used where the device has it (Apple's license forbids bundling it).
+// Iosevka is the bundled fallback; it is not preloaded, so SF Mono devices never download it.
+// font-display: fallback waits up to 100ms for Iosevka before showing a system font.
 const face = (src: string, weight: number, style: string) =>
   `@font-face{font-family:'Iosevka';font-style:${style};font-weight:${weight};font-display:fallback;src:url(${src}) format('woff2')}`
 const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'italic'), face(iosevka600, 600, 'normal')].join('')
@@ -32,9 +33,6 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <!-- Preload the main weights so the first paint already uses Iosevka (no font swap on navigation). -->
-    <link rel="preload" href={iosevka400} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={iosevka600} as="font" type="font/woff2" crossorigin />
     <style is:inline set:html={fontFaces}></style>
     <script is:inline>
       // Set the theme before first paint: saved choice, else the system setting.
@@ -103,29 +101,11 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
 </html>
 
 <style is:global>
-  /* Cross-fade between pages instead of blanking and repainting on every click. */
-  @view-transition {
-    navigation: auto;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    @view-transition {
-      navigation: none;
-    }
-  }
-  /* Page switches: the clicked title and the site name glide into place; everything else cross-fades. */
-  ::view-transition-group(*) {
-    animation-duration: 0.4s;
-    animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
-  }
   /* Theme switch: replace the default cross-fade with the circle reveal set up in the script. */
   .theme-switching::view-transition-old(root),
   .theme-switching::view-transition-new(root) {
     animation: none;
     mix-blend-mode: normal;
-  }
-  /* Elements shared between pages must not be captured separately, or the circle would skip them. */
-  .theme-switching .vt-shared {
-    view-transition-name: none !important;
   }
 
   :root {
@@ -137,11 +117,11 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     --eng: #2c46c4;
     --life: #8c3a62;
 
-    --font: 'Iosevka', ui-monospace, monospace;
+    --font: 'SF Mono', ui-monospace, 'Iosevka', monospace;
 
     /* Home and engineering pages use the cobalt accent; life pages override below. */
     --accent: var(--eng);
-    --body-leading: 1.65;
+    --body-leading: 1.5;
     color-scheme: light;
   }
   :root[data-theme='dark'] {
@@ -159,11 +139,11 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
   }
   [data-category='life'] {
     --accent: var(--life);
-    --body-leading: 1.75;
+    --body-leading: 1.6;
   }
 
   html {
-    font-size: 93.75%; /* 15px at the browser default, still scales with user settings */
+    font-size: 87.5%; /* 14px at the browser default, still scales with user settings */
   }
   body {
     margin: 0;
@@ -172,7 +152,6 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     font-family: var(--font);
     font-size: 1rem;
     line-height: var(--body-leading);
-    -webkit-font-smoothing: antialiased;
   }
   main {
     position: relative;
@@ -214,11 +193,11 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     font-weight: 600;
   }
   h2 {
-    font-size: 1.375rem;
+    font-size: 1.125rem;
     margin: 2.75rem 0 0.75rem;
   }
   h3 {
-    font-size: 1.125rem;
+    font-size: 1rem;
     margin: 2rem 0 0.5rem;
   }
 
@@ -271,7 +250,7 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
 
   code {
     font-family: inherit;
-    font-size: 0.95em;
+    font-size: inherit;
   }
   :not(pre) > code {
     background: var(--code-bg);
@@ -285,8 +264,8 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     background-color: transparent !important;
     margin: 1.75rem 0;
     padding: 1.6rem 0 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1.6;
+    font-size: inherit;
+    line-height: 1.5;
     scrollbar-width: thin;
     scrollbar-color: var(--rule) transparent;
   }
