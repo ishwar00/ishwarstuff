@@ -9,8 +9,13 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    category: z.enum(categories)
+    category: z.enum(categories),
+    // Drafts show on the local dev server only, never in a production build.
+    draft: z.boolean().default(false)
   })
 })
 
 export const collections = { posts }
+
+export const isVisible = (post: { data: { draft: boolean } }) =>
+  import.meta.env.DEV || !post.data.draft

@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 import Base from '../layouts/Base.astro'
-import type { categories } from '../content.config'
+import { isVisible, type categories } from '../content.config'
 import { projects } from '../projects'
 
 interface Props {
@@ -11,7 +11,7 @@ const { category } = Astro.props
 
 // Every tab page renders all posts; the tab only decides which are hidden.
 // The script below switches tabs in place, so a tab click never reloads the page.
-const posts = (await getCollection('posts')).sort(
+const posts = (await getCollection('posts', isVisible)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 )
 const shown = (c: string) => !category || c === category
