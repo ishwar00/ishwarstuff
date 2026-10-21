@@ -1,0 +1,71 @@
+---
+// Before/after diagram for the extraction example. Dashed boxes are the parts the
+// review removed. Shares its styles with the other diagrams in this post.
+import './diagram.css'
+---
+
+<figure class="flow">
+  <p class="state"><strong>Before</strong> the model writes code, dashed parts removed</p>
+  <svg viewBox="9.5 6 590.5 168" role="img" aria-label="Before: once per dataset, an agent, checked by a review and repair loop with 18 checks, writes extract.py: its decisions, as code. It runs once over all records in Python with Docling, outside the main app, to produce the output. The agent, generated code and Python runtime were removed.">
+    <defs>
+      <marker id="arrow-x" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path class="head" d="M0 0 L8 4 L0 8 z"></path>
+      </marker>
+    </defs>
+    <text class="note start" x="10" y="18">once per dataset</text>
+    <path class="edge" d="M90 40 H126" marker-end="url(#arrow-x)"></path>
+    <path class="edge" d="M379 40 H415" marker-end="url(#arrow-x)"></path>
+    <path class="edge" d="M430 56 V100 H213.5 V118" marker-end="url(#arrow-x)"></path>
+
+    <rect class="box" x="10" y="24" width="80" height="32" rx="4"></rect>
+    <text x="50" y="44">dataset</text>
+    <rect class="box gone" x="128" y="24" width="251" height="32" rx="4"></rect>
+    <text x="253.5" y="44">agent</text>
+    <text class="note" x="253.5" y="72">with a review + repair loop, 18 checks</text>
+    <rect class="box gone" x="417" y="24" width="98" height="32" rx="4"></rect>
+    <text x="466" y="44">extract.py</text>
+    <text class="note start" x="522" y="37">decisions,</text>
+    <text class="note start" x="522" y="52">as code</text>
+
+    <text class="note start" x="10" y="114">all records, once</text>
+    <path class="edge" d="M284 136 H318" marker-end="url(#arrow-x)"></path>
+    <rect class="box gone" x="143" y="120" width="141" height="32" rx="4"></rect>
+    <text x="213.5" y="140">Python + Docling</text>
+    <text class="note" x="213.5" y="168">outside the main app</text>
+    <rect class="box" x="320" y="120" width="75" height="32" rx="4"></rect>
+    <text x="357.5" y="140">output</text>
+
+  </svg>
+
+  <p class="state after"><strong>After</strong> the model makes decisions, code applies them</p>
+  <svg viewBox="9.5 6 590.5 184" role="img" aria-label="After: once per dataset, code builds a summary of its data patterns, and the model makes a few calls to pick a rule for each pattern, saved as rules JSON: the same decisions, as data. One engine in the main app, the same for all datasets, applies those rules to all records once to build the output.">
+    <text class="note start" x="10" y="18">once per dataset</text>
+    <path class="edge" d="M90 40 H126" marker-end="url(#arrow-x)"></path>
+    <path class="edge" d="M261 40 H297" marker-end="url(#arrow-x)"></path>
+    <path class="edge" d="M379 40 H415" marker-end="url(#arrow-x)"></path>
+    <path class="edge" d="M466 56 V100 H213 V118" marker-end="url(#arrow-x)"></path>
+
+    <rect class="box" x="10" y="24" width="80" height="32" rx="4"></rect>
+    <text x="50" y="44">dataset</text>
+    <rect class="box" x="128" y="24" width="133" height="32" rx="4"></rect>
+    <text x="194.5" y="44">pattern summary</text>
+    <text class="note" x="194.5" y="72">built by code</text>
+    <rect class="box" x="299" y="24" width="80" height="32" rx="4"></rect>
+    <text x="339" y="44">model</text>
+    <text class="note" x="339" y="72">a few calls</text>
+    <rect class="box" x="417" y="24" width="98" height="32" rx="4"></rect>
+    <text x="466" y="44">rules JSON</text>
+    <text class="note start" x="522" y="37">decisions,</text>
+    <text class="note start" x="522" y="52">as data</text>
+
+    <text class="note start" x="10" y="114">all records, once</text>
+    <path class="edge" d="M253 136 H318" marker-end="url(#arrow-x)"></path>
+    <rect class="box" x="173" y="120" width="80" height="32" rx="4"></rect>
+    <text x="213" y="140">engine</text>
+    <text class="note" x="213" y="168">in the main app,</text>
+    <text class="note" x="213" y="183">one for all datasets</text>
+    <rect class="box" x="320" y="120" width="75" height="32" rx="4"></rect>
+    <text x="357.5" y="140">output</text>
+
+  </svg>
+</figure>

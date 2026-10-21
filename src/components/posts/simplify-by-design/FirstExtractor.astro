@@ -1,0 +1,37 @@
+---
+// The first extractor: an agent with two tools that writes extract.py. Shares its
+// styles with the other diagrams in this post.
+import './diagram.css'
+---
+
+<figure class="flow">
+  <svg viewBox="9.5 15 590.5 160" role="img" aria-label="The first extractor: for each dataset, an agent with two tools. With python_execute it runs Python code in a sandbox. With submit_review it submits its work for 18 checks; if a check fails, it fixes its code and submits again. When all checks pass, the result is extract.py, the code the agent wrote.">
+    <defs>
+      <marker id="arrow-v1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path class="head" d="M0 0 L8 4 L0 8 z"></path>
+      </marker>
+    </defs>
+    <path class="edge" d="M90 40 H126" marker-end="url(#arrow-v1)"></path>
+    <path class="edge" d="M193 58 V118" marker-start="url(#arrow-v1)" marker-end="url(#arrow-v1)"></path>
+    <text class="note end" x="185" y="86">runs code</text>
+    <text class="note end" x="185" y="101">in a sandbox</text>
+    <path class="edge" d="M335 58 V118" marker-start="url(#arrow-v1)" marker-end="url(#arrow-v1)"></path>
+    <text class="note start" x="343" y="86">fails: fix</text>
+    <text class="note start" x="343" y="101">and retry</text>
+    <path class="edge" d="M400 136 H452" marker-end="url(#arrow-v1)"></path>
+    <text class="note" x="426" y="128">passes</text>
+
+    <rect class="box" x="10" y="24" width="80" height="32" rx="4"></rect>
+    <text x="50" y="44">dataset</text>
+    <rect class="box" x="128" y="24" width="272" height="32" rx="4"></rect>
+    <text x="264" y="44">agent</text>
+    <rect class="box" x="128" y="120" width="130" height="32" rx="4"></rect>
+    <text x="193" y="140">python_execute</text>
+    <rect class="box" x="270" y="120" width="130" height="32" rx="4"></rect>
+    <text x="335" y="140">submit_review</text>
+    <text class="note" x="335" y="168">18 checks</text>
+    <rect class="box" x="454" y="120" width="98" height="32" rx="4"></rect>
+    <text x="503" y="140">extract.py</text>
+    <text class="note" x="503" y="168">the code it wrote</text>
+  </svg>
+</figure>

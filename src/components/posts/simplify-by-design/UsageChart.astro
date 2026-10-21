@@ -1,0 +1,107 @@
+---
+// Weekly uses of the skill across Claude Code and Codex, counted from local session logs
+// on 21 Oct 2026. Complete weeks only.
+const weeks: [string, number][] = [
+  ['10 Aug', 3],
+  ['17 Aug', 3],
+  ['24 Aug', 10],
+  ['31 Aug', 11],
+  ['07 Sep', 5],
+  ['14 Sep', 2],
+  ['21 Sep', 13],
+  ['28 Sep', 19],
+  ['05 Oct', 23],
+  ['12 Oct', 25]
+]
+const max = Math.max(...weeks.map(([, n]) => n))
+const total = weeks.reduce((sum, [, n]) => sum + n, 0)
+// Show the month name only where it changes, so the axis stays uncluttered.
+const months = weeks.map(([w], i) => {
+  const m = w.split(' ')[1]
+  return i === 0 || m !== weeks[i - 1][0].split(' ')[1] ? m : ''
+})
+---
+
+<figure class="usage">
+  <p class="title"><strong>Uses per week</strong> {total} in total, Claude Code and Codex</p>
+  <ol class="plot" style={`--weeks: ${weeks.length}`}>
+    {weeks.map(([week, n]) => (
+      <li>
+        <span class="sr">Week of {week}: {n} uses</span>
+        <span class="v" aria-hidden="true">{n}</span>
+        <span class="bar" aria-hidden="true" style={`height: ${(n / max) * 100}%`}></span>
+      </li>
+    ))}
+  </ol>
+  <div class="axis" aria-hidden="true" style={`--weeks: ${weeks.length}`}>
+    {weeks.map(([week], i) => (
+      <span>
+        {week.split(' ')[0]}
+        <br />
+        <span class="month">{months[i]}</span>
+      </span>
+    ))}
+  </div>
+</figure>
+
+<style>
+  .usage {
+    margin: 2rem 0;
+  }
+  .title {
+    margin: 0 0 1.25rem;
+    color: var(--muted);
+  }
+  .title strong {
+    margin-right: 1ch;
+    color: var(--ink);
+  }
+  .plot,
+  .axis {
+    display: grid;
+    grid-template-columns: repeat(var(--weeks), 1fr);
+    gap: 0.4rem;
+  }
+  .plot {
+    height: 9rem;
+    margin: 0;
+    padding: 1.5rem 0 0;
+    list-style: none;
+    border-bottom: 1px solid var(--rule);
+  }
+  .plot li {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+  }
+  .bar {
+    display: block;
+    width: 70%;
+    min-height: 2px;
+    background: var(--accent);
+    border-radius: 4px 4px 0 0;
+  }
+  .v {
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .axis {
+    margin-top: 0.4rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

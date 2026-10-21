@@ -236,6 +236,67 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
     border-radius: 4px;
   }
 
+  blockquote {
+    margin: 1.5rem 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--rule);
+    color: var(--muted);
+  }
+  blockquote strong {
+    color: var(--ink);
+  }
+
+  /* Prompt timelines: wrap a list in <div class="prompts">; each item starts with `HH:MM`. */
+  .prompts ul,
+  .prompts ol {
+    list-style: none;
+    padding: 0;
+  }
+  .prompts li {
+    margin: 0.5rem 0;
+    padding-left: 8ch;
+    text-indent: -8ch;
+  }
+  .prompts li > code:first-child {
+    background: none;
+    padding: 0;
+    color: var(--muted);
+  }
+  .prompts li > code:first-child::after {
+    content: ' ❯ ';
+    color: var(--accent);
+  }
+  /* A list item without a leading time is a gap between prompts, e.g. `- ✻ 3h 26m`. */
+  .prompts li:not(:has(> code:first-child)) {
+    padding-left: 8ch;
+    text-indent: 0;
+    color: var(--muted);
+  }
+
+  table {
+    width: 100%;
+    margin: 1.75rem 0;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  th,
+  td {
+    padding: 0.45rem 1rem 0.45rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  @media (max-width: 30rem) {
+    table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+
   .signoff {
     margin-top: 3rem;
     text-align: center;
@@ -279,6 +340,14 @@ const fontFaces = [face(iosevka400, 400, 'normal'), face(iosevka400i, 400, 'ital
   }
   .astro-code code {
     counter-reset: line;
+  }
+  /* ```text blocks are diagrams: no language label, no line numbers. */
+  .astro-code[data-language='text']::before,
+  .astro-code[data-language='text'] .line::before {
+    content: none;
+  }
+  .astro-code[data-language='text'] {
+    padding-top: 0.5rem;
   }
   .astro-code .line::before {
     counter-increment: line;

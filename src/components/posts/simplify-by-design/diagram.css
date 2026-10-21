@@ -1,0 +1,71 @@
+/* Shared styles for this post's before/after diagrams. Scoped under .flow. */
+.flow {
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+.flow svg {
+  display: block;
+  width: 100%;
+  min-width: 440px;
+  font-family: var(--font);
+  font-size: 13px;
+}
+.flow .state {
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+}
+.flow .state strong {
+  margin-right: 1ch;
+  color: var(--ink);
+}
+.flow .after {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+.flow text {
+  fill: var(--ink);
+  text-anchor: middle;
+}
+.flow .start {
+  text-anchor: start;
+}
+.flow .end {
+  text-anchor: end;
+}
+.flow .note {
+  fill: var(--muted);
+  font-size: 12px;
+}
+.flow .box {
+  fill: var(--paper);
+  stroke: var(--muted);
+}
+.flow .gone {
+  stroke-dasharray: 4 3;
+  opacity: 0.75;
+}
+.flow .kept {
+  stroke: var(--accent);
+}
+/* The finding a diagram hinges on. */
+.flow .key {
+  fill: var(--accent);
+}
+/* Numbered badges mark the places that hold state. */
+.flow .badge {
+  fill: var(--paper);
+  stroke: var(--accent);
+}
+.flow .badge-n {
+  fill: var(--accent);
+  font-size: 10px;
+  font-weight: 600;
+}
+.flow .edge {
+  fill: none;
+  stroke: var(--muted);
+}
+.flow .head {
+  fill: var(--muted);
+}

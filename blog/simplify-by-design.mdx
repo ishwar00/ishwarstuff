@@ -1,9 +1,13 @@
 ---
-title: "Simplify by Design"
+title: "The most effective skill I've been using"
 date: "2026-10-20"
 category: "engineering"
-draft: true
 ---
+
+import EmailFlow from '../src/components/posts/simplify-by-design/EmailFlow.astro'
+import FirstExtractor from '../src/components/posts/simplify-by-design/FirstExtractor.astro'
+import ExtractionFlow from '../src/components/posts/simplify-by-design/ExtractionFlow.astro'
+import UsageChart from '../src/components/posts/simplify-by-design/UsageChart.astro'
 
 {/*
   Your post. Delete this note whenever you like; it never renders.
@@ -19,3 +23,119 @@ draft: true
 
   To publish: remove `draft: true` and deploy.
 */}
+
+I have been using the LLMs from copy pasting chatgpt's output into the file then cursor, claude code and codex.
+They all shared traits of overcomplicating things, just augmenting fields and logic. As new models released, 
+things improved, but not solved yet(though opus 5.5 is leap improvement). 
+
+It got really unbearable, when i had to review the PRs, the amount of diff didnt justify for the task clearly.
+This forced me to reverse engineer PRs diff to understand what is being tried to ship, because 
+that huge diff is scary.
+
+
+btw the changes are tested, it works, it does what author wanted, SURE, it does. Isn't it exactly how LLMs are [trained](https://www.youtube.com/watch?v=Ib5GBkD555M)?
+
+Fine i wont rant, let me be bit professional(_cough_). During one of the _reverse engineering_ sessions(with Fable 5), i decided to ask it to simplify the PR changes without reading diff,
+to see how far i can get.
+
+Prompts: 
+<div class="prompts">
+
+- `17:00` i want to simplify this by design, ask counter questions … for each design, for that have to understand the system its interacting with and you gotta have full picture to make decisions
+- ✻ Shenaniganing.................
+- `17:08` dont be lazy, dont work with assumptions or guesses, be thorough, be hard working
+- ✻ Moonwalking......................
+- `17:11` my goal is to simplify, that ~2.5k line of diff, i dont think we need that much of code, for the task. look alternatives simplers ones, pragmatic
+- ✻ Hullaballooing..........
+- `20:37` goal is simplify things cut it down, for that you you have to understand the system diff is interacting with, you have to have full picture of what is going on…
+- .............;P...... 
+- ✻ Cooked for 8m on the last prompt
+
+</div>
+
+And impressively.
+|                           | Before review |  After review |
+| ------------------------- | ------------: | ------------: |
+| `src` lines added         |         2,136 | 1,556  |
+| `src` files               |            22 |    16  |
+| Collections added         |             2 |             0 |
+| Controller + routes + DTO |     147 lines |       deleted |
+
+Pretty good result actually, there is one simplification that stuck with me.
+
+So the PR had this pipeline where a worker polls a shared inbox and turns each customer email into a support message.
+
+<EmailFlow />
+
+It decided to use inbox API to label emails, that removed the major plumbing, pretty cool. Duplicate email table was quite obvious cleanup.
+
+So i created a [skill](https://github.com/ishwar00/simplify-by-design-review/blob/11faed6c9779d4f6af63c2b4c25d36303b051faf/SKILL.md) out of prompts 
+in that session. I think most influential phrases were `simplify this by design, ask counter questions … for each design` and `look alternatives simplers ones, pragmatic` that guided model's thinking.
+
+
+Later, I [Added](https://github.com/ishwar00/simplify-by-design-review/commit/34802d4e68d9967c9b644bcc54765420a5dac1bf) two more guiding instructions. 
+
+>**Solve the right problem — the biggest simplification.**
+>
+>Understand the objective, the motivation, and the success criteria. What are we even solving here? Is this ACTUALLY the thing we intend to solve, or are we doing something that's not right? Half understanding the problem is more dangerous than not understanding it. If things are not clear, ask clarifying questions. If you cannot ask, state the assumption up front. Don't overfit the problem.
+>
+>Once the requirements are crystal clear, question the product design thoroughly. Collect data, be data-based wherever possible.
+>
+(_"dangerous", lol_)
+
+This pushes the agent to think from scratch, instead of anchoring on the current plan/diff/context. 
+And question product decisions based on the data.(_muaah_)
+
+>**How to think**
+>
+>Don't be lazy, don't work with assumptions or guesses — be thorough, be hard working.
+>
+>dont always try to produce next possible answer, dont settle on the first thought, ponder, wonder, think through different ways, connect, mix and try non-standard, creative, mix and connect different dimension world domain ideas and concepts. Think ponder challenge your own ideas and seemingly possible answers and refine it
+
+Second is supposed to push LLMs to produce THE answer instead of next possible answer.
+
+I've been using this skill a lot. Now this has become quite generic skill and not particularly tied to PR diff. 
+For instance, I use it to cut BS from drafted whatsapp message replies now.
+<UsageChart />
+
+## The Best Result
+
+I was working on a POC to validate an idea and to production if it works out. I can't share details but it was about data extraction.
+You had to understand patterns present in the raw data and write a logic to extract useful data. 
+
+Prototyped with GPT-Astra, after days of iterations, pipeline(_model + prompt + architecture_) reached some stability and performed well on unseen datasets. 
+Harness had two tools, `python_execute` to run python code and `submit_review` to submit for final review. 
+
+<FirstExtractor />
+
+I was preparing the code to be ready for the deployment, i wanted to clean up and simplify the built harness and flow, since GPT's like to overcomplicate things.
+
+Sent
+<div class="prompts">
+- `22:55` /simplify-by-design-review
+</div>
+After 10 mins
+
+|                  | Before  | After   |
+| ---------------- | ------- | ------- |
+| Lines of code    | 6,797   | 4,485   |
+| Runtimes         | 2       | 1       |
+| Cost per dataset | ~$0.12  | ~$0.018 |
+| Time per dataset | ~14 min | ~1 min  |
+
+<ExtractionFlow />
+
+Okay honestly i didn't expect this, we use Nodejs, in worst case i had to use [Agents API](https://developers.openai.com/api/docs/guides/agents-api/overview?site_locale=en) because of the `python_execute` tool. 
+Not only it got rid of python tools, it improved on the cost and time!!
+
+## Observation
+
+I think it works best when you have built a system that works. if you have built it then it has rich details(code itself)
+of all the services and changes that planning phase might have missed, and you have tested and iterated it, so its stable, plumbing works. 
+Inefficiencies become quite easy to identify once you have plumbing works, getting the first inefficient plumbing is like collecting data phase.
+
+
+
+
+
+
