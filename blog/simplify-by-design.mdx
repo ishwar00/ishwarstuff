@@ -35,8 +35,8 @@ that huge diff is scary.
 
 btw the changes are tested, it works, it does what author wanted, SURE, it does. Isn't it exactly how LLMs are [trained](https://www.youtube.com/watch?v=Ib5GBkD555M)?
 
-Fine i wont rant, let me be bit professional(_cough_). During one of the _reverse engineering_ sessions(with Fable 5), i decided to ask it to simplify the PR changes without reading diff,
-to see how far i can get.
+Fine i won't rant, let me be bit professional(_cough_). So in one of the _reverse engineering_ session, PR diff was too big to justify the task,
+so i thought let me throw this diff at the claude(_Fable 5_) and ask it to simplify, btw i didnt read the diff yet. 
 
 Prompts: 
 <div class="prompts">
@@ -47,9 +47,7 @@ Prompts:
 - ✻ Moonwalking......................
 - `17:11` my goal is to simplify, that ~2.5k line of diff, i dont think we need that much of code, for the task. look alternatives simplers ones, pragmatic
 - ✻ Hullaballooing..........
-- `20:37` goal is simplify things cut it down, for that you you have to understand the system diff is interacting with, you have to have full picture of what is going on…
-- .............;P...... 
-- ✻ Cooked for 8m on the last prompt
+- ✻ Cooked for 15m 
 
 </div>
 
@@ -69,11 +67,13 @@ So the PR had this pipeline where a worker polls a shared inbox and turns each c
 
 It decided to use inbox API to label emails, that removed the major plumbing, pretty cool. Duplicate email table was quite obvious cleanup.
 
-So i created a [skill](https://github.com/ishwar00/simplify-by-design-review/blob/11faed6c9779d4f6af63c2b4c25d36303b051faf/SKILL.md) out of prompts 
-in that session. I think most influential phrases were `simplify this by design, ask counter questions … for each design` and `look alternatives simplers ones, pragmatic` that guided model's thinking.
+If i can get this kinda result then i want to repeat this for every PR i get and obvious next step
+is to create a skill out of prompts from that session, i named it [simplify-by-design-review](https://github.com/ishwar00/simplify-by-design-review/blob/11faed6c9779d4f6af63c2b4c25d36303b051faf/SKILL.md). 
 
+I started to use it for every PR, though i didnt get any dramatic simplifications like i did for the first time.
 
-Later, I [Added](https://github.com/ishwar00/simplify-by-design-review/commit/34802d4e68d9967c9b644bcc54765420a5dac1bf) two more guiding instructions. 
+Later, i [added](https://github.com/ishwar00/simplify-by-design-review/commit/34802d4e68d9967c9b644bcc54765420a5dac1bf) two more guiding instructions to 
+address the issues observed with use.
 
 >**Solve the right problem — the biggest simplification.**
 >
@@ -83,8 +83,7 @@ Later, I [Added](https://github.com/ishwar00/simplify-by-design-review/commit/34
 >
 (_"dangerous", lol_)
 
-This pushes the agent to think from scratch, instead of anchoring on the current plan/diff/context. 
-And question product decisions based on the data.(_muaah_)
+This pushes the agent to think from scratch, instead of anchoring on the current plan/diff/context and question product decisions based on the data.(_muaah_)
 
 >**How to think**
 >
@@ -109,6 +108,7 @@ Harness had two tools, `python_execute` to run python code and `submit_review` t
 <FirstExtractor />
 
 I was preparing the code to be ready for the deployment, i wanted to clean up and simplify the built harness and flow, since GPT's like to overcomplicate things.
+By then i had **Opus 5.5**.
 
 Sent
 <div class="prompts">
@@ -125,15 +125,23 @@ After 10 mins
 
 <ExtractionFlow />
 
-Okay honestly i didn't expect this, we use Nodejs, in worst case i had to use [Agents API](https://developers.openai.com/api/docs/guides/agents-api/overview?site_locale=en) because of the `python_execute` tool. 
-Not only it got rid of python tools, it improved on the cost and time!!
+I didn't expect this, we use Nodejs, in worst case i had to use [Agents API](https://developers.openai.com/api/docs/guides/agents-api/overview?site_locale=en) because of the `python_execute` tool. 
+Not only it got rid of python tools, it improved on the cost and time!! But in this case, i think its more of model than the skill, because right after this, i tried to get the similar result with GPT-6-Astra and 
+tried multiple times couldnt get it. Opus just needed the right framework to think.
+
+
+Though this is not a fair measure of anything, these results are not produced in an isolated setup with the same environment, 
+though opus 5.5 is the best model at the time of writing.
+
 
 ## Observation
 
-I think it works best when you have built a system that works. if you have built it then it has rich details(code itself)
-of all the services and changes that planning phase might have missed, and you have tested and iterated it, so its stable, plumbing works. 
-Inefficiencies become quite easy to identify once you have plumbing works, getting the first inefficient plumbing is like collecting data phase.
+I have been using [simplify-by-design-review](https://github.com/ishwar00/simplify-by-design-review) 
+a lot, on PRs, plans, docs pretty much on everything that needs fresh view top-bottom, it helps to cut down the obvious bloat and sometimes cuts features before they're built.
 
+I think it works best when you have built a system that works because it has rich details(code itself)
+and plumbing that you have tested and iterated, its stable, works. 
+Inefficiencies become quite easy to identify once you have working system, getting the first inefficient system is like collecting data phase.
 
 
 
